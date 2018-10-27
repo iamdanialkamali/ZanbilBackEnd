@@ -16,20 +16,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-<<<<<<< HEAD
 from API.Authentication import AuthentiationController
 from API.Business import BusinessController
+
 from rest_framework.urlpatterns import format_suffix_patterns
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/auth/',AuthentiationController.as_view()),
     path('api/business/',BusinessController.as_view())
-=======
 
-from rest_framework.urlpatterns import format_suffix_patterns
-urlpatterns = [
-    path('admin/', admin.site.urls),
->>>>>>> 0.0.1
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

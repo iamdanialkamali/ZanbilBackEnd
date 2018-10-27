@@ -2,6 +2,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from .Serializer import BusinessSerializer
 
 from .models import Business
 import json
@@ -39,6 +40,17 @@ class BusinessController(APIView):
         except Exception :
             return Response({},status=status.HTTP_400_BAD_REQUEST)
     def get(self, request, format=None, *args, **kwargs):
-        pass
+
+        try:
+
+            id = request.GET['business_id']
+            business=Business.objects.get(pk=id)
+            business_data=BusinessSerializer(business).data
+            return Response(business_data, status= status.HTTP_200_OK)
+
+        except Exception:
+            return Response({}, status= status.HTTP_400_BAD_REQUEST)
+
+
     def patch(self, request, format=None, *args, **kwargs):
         pass
