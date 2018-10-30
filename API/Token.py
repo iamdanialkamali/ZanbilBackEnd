@@ -12,13 +12,18 @@ class Tokenizer:
     def decode(self,token):
         return  jwt.decode(token, TOKEN_KEY, algorithms=['HS256'])
 
+
+
     def user_token_generator(self,user):
         message = {
             'id': user.id
         }
         encoded = jwt.encode(message, TOKEN_KEY, algorithm='HS256')
         return { "jwt" :encoded}
+
     def meta_encode(self,meta):
-        token = meta.split(' ')[1]
+
+        token = meta['HTTP_AUTHORIZATION'].split(' ')[1]
         message = jwt.decode(token, TOKEN_KEY, algorithms=['HS256'])
+
         return message['id']
