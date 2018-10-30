@@ -22,7 +22,7 @@ class Categories(models.Model):
 
 
 class Business(models.Model):
-    owner = models.ForeignKey(Users, on_delete=models.DO_NOTHING, null=True)
+    owner = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True)
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     phone_number = models.TextField(max_length=15)
