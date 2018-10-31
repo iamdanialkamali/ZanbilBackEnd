@@ -24,7 +24,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/auth/',AuthentiationController.as_view()),
-    path('api/business/',BusinessController.as_view())
+    path('api/business/<int:business_id>',BusinessController.as_view())
 
 ]
 
