@@ -44,7 +44,7 @@ class BusinessController(APIView):
 
         try:
 
-            id = kwargs['business_id']
+            id = request.GET['business_id']
             business=Business.objects.get(pk=id)
             business_data=BusinessSerializer(business).data
             return Response(business_data, status= status.HTTP_200_OK)
