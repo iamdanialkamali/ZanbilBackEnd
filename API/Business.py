@@ -24,7 +24,7 @@ class BusinessController(APIView):
             category = int(data['category'])
 
             if(True):
-                Business.objects.create(
+                mybusiness = Business.objects.create(
                     owner_id = user_id,
                     name = name,
                     phone_number= phone_number,
@@ -35,8 +35,8 @@ class BusinessController(APIView):
 
                 )
 
-
-            return Response({} , status=status.HTTP_200_OK)##TODO:Serializer
+            business_data = BusinessSerializer(mybusiness).data
+            return Response(business_data, status=status.HTTP_200_OK)
 
         except Exception :
             return Response({},status=status.HTTP_400_BAD_REQUEST)
