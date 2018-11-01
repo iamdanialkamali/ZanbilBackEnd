@@ -11,9 +11,10 @@ class SansController:
         for sans in sanses :
             serialized = SansSerializer(sans)
             result[sans.weekday].append(serialized.data)
-    #get date and timetable id and return
         return result
     @staticmethod
+    
+      #get date and timetable id and return
     def getSansForPage(timetable_id,date):
 
         #calculate weekdays date of given date
