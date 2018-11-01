@@ -49,20 +49,22 @@ class ServiceController(APIView):
         #
 
     def get(self, request, format=None, *args, **kwargs):
-        try:
+       # try:
             id = request.GET['service_id']
             service=Services.objects.get(pk=id)
 
-
             service_data=ServiceSerializer(service).data
-            timetable = TimeTable.objects.get(Service_id=service.id)
+            timetable = TimeTable.objects.get(services__id=service.id)
             today = JalaliDate.today().__str__().replace('-','/')
-            SansController.getSansForPage(timetable_id=timetable.id,date=today)
-            return Response(service_data, status= status.HTTP_200_OK)
+            sanses = SansController.getSansForPage(timetable_id=timetable.id,date=today)
+            return Response({"service":service_data,
+                             "sanses":sanses
+                             }
+                            , status= status.HTTP_200_OK)
 
-        except Exception:
-            return Response({}, status= status.HTTP_400_BAD_REQUEST)
 
+        #except Exception:
+         #   return Response({}, status= status.HTTP_400_BAD_REQUEST)
 
     def post(self, request, format=None, *args, **kwargs):
         try:
@@ -71,7 +73,7 @@ class ServiceController(APIView):
             service=Services.objects.get(pk=id)
             date = data['date']
             service_data=ServiceSerializer(service).data
-            timetable = TimeTable.objects.get(Service_id=service.id)
+            timetable = TimeTable.objects.get(services__id=service.id)
             SansController.getSansForPage(timetable_id=timetable.id,date=date)
             return Response(service_data, status= status.HTTP_200_OK)
 

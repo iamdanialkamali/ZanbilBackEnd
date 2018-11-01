@@ -31,7 +31,7 @@ class SansController:
 
         #get sanses
         selected_sanses = Sans.objects.filter(
-            time_table__id=timetable_id).order_by('start_time')
+            timetable__id=timetable_id).order_by('start_time')
 
         # get reserved sanses in given week
         reserved_sanses = Reserves.objects.filter(date__in=this_week_days_date)
@@ -39,11 +39,11 @@ class SansController:
         #exmine are seleted sanses reserved
         result=[[],[],[],[],[],[],[]]
         for sans in selected_sanses:
-                is_reserved = False
-                for reserved in reserved_sanses:
-                    if (sans.id == reserved.sans.id):
-                        is_reserved = True
-        result[sans.weekday].append({"sans":sans,"is_reserved": is_reserved})
+            is_reserved = False
+            for reserved in reserved_sanses:
+                if (sans.id == reserved.sans.id):
+                    is_reserved = True
+            result[sans.weekday].append({"sans":SansSerializer(sans).data,"is_reserved": is_reserved})
 
         return result
 
