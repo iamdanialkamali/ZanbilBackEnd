@@ -6,14 +6,13 @@ from .Serializer import BusinessSerializer
 
 from .models import Business
 import json
-from .Token import Tokenizer
-tokenizer = Tokenizer()
+from .Token import Tokenizer as tokenizer
 class BusinessController(APIView):
     def put(self, request, format=None, *args, **kwargs):
             # user_id = tokenizer.meta_encode(request.META)
 
 
-        try:
+         try:
             user_id = tokenizer.meta_encode(request.META)
             data = json.loads(request.body)
             name = data['name']
@@ -38,8 +37,8 @@ class BusinessController(APIView):
             business_data = BusinessSerializer(mybusiness).data
             return Response(business_data, status=status.HTTP_200_OK)
 
-        except Exception :
-            return Response({},status=status.HTTP_400_BAD_REQUEST)
+         except Exception :
+             return Response({},status=status.HTTP_400_BAD_REQUEST)
     def get(self, request, format=None, *args, **kwargs):
 
         try:

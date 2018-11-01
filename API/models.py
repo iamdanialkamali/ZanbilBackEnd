@@ -31,7 +31,7 @@ class Business(models.Model):
     score = models.FloatField(default=0)
     address = models.TextField(max_length=500)
     description = models.TextField(max_length=600, default='test')
-    category = models.ForeignKey(Categories, on_delete=models.DO_NOTHING)
+    category = models.ForeignKey(Categories, on_delete=models.DO_NOTHING,related_name='businesses')
     #image =models.ImageField(default='2.jpg')
 
     def __str__(self):
@@ -43,6 +43,7 @@ class Business(models.Model):
 
 class TimeTable(models.Model):
     id = models.AutoField(primary_key=True)
+    business  = models.ForeignKey(to= Business,on_delete=models.DO_NOTHING,related_name='timetables')
     sans_count = models.IntegerField()
     # work_days = ArrayField(models.IntegerField(blank=True), blank=True)
     # rest_times = ArrayField(models.IntegerField(blank=True), blank=True)
@@ -50,9 +51,9 @@ class TimeTable(models.Model):
 
 class Sans(models.Model):
     id = models.AutoField(primary_key=True)
-    start_time = models.IntegerField(default=0)
-    end_time = models.IntegerField(default=0)
-    time_table = models.ForeignKey(to=TimeTable, on_delete=models.DO_NOTHING)
+    start_time = models.CharField(default="00:00",max_length=5)
+    end_time = models.CharField(default="00:00",max_length=5)
+    timetable = models.ForeignKey(to=TimeTable, on_delete=models.DO_NOTHING,related_name='sanses')
     weekday = models.PositiveIntegerField(null=True)
 
     def __str__(self):
@@ -61,22 +62,13 @@ class Sans(models.Model):
 
 class Services(models.Model):
     id = models.AutoField(primary_key=True)
-    business = models.ForeignKey(to=Business, on_delete=models.DO_NOTHING)
+    business = models.ForeignKey(to=Business, on_delete=models.DO_NOTHING,related_name='services')
     name = models.CharField(max_length=30)
     # pics = ArrayField(models.ImageField(blank=True),blank=True,default=[])
     fee = models.FloatField()
     timetable = models.ForeignKey(TimeTable, on_delete=models.DO_NOTHING)
     rating = models.FloatField(default=0)
     description = models.TextField(max_length=600, blank=True)
-    cancellation_fee = models.FloatField(default=0)
-    cancelation_time = models.FloatField(default=0)
-    capacity = models.IntegerField()
-    off = models.FloatField(default=0)
-    firstSans = models.FloatField(default=8)
-    lastSans = models.FloatField(default=20)
-    restTimeStart = models.FloatField(default=12)
-    restTimeEnd = models.FloatField(default=12)
-
 
     def __str__(self):
         return self.name

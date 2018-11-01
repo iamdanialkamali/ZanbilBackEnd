@@ -1,8 +1,37 @@
 from rest_framework import serializers
-from .models import Business
-class BusinessSerializer(serializers.ModelSerializer):
+from .models import Business, Services, TimeTable, Sans, Categories
+
+class ServiceSerializer(serializers.ModelSerializer):
+
     class Meta:
-        model=Business
+        model = Services
+        fields=[
+            'id',
+            'business',
+            'name',
+            'fee',
+            'rating',
+            'timetable',
+            'description',
+        ]
+
+
+class SansSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sans
+        fields = [
+            'id',
+            'start_time',
+            'end_time',
+            'timetable_id',
+            'weekday',
+        ]
+
+
+class BusinessSerializer(serializers.ModelSerializer):
+    services = ServiceSerializer(many=True)
+    class Meta:
+        model = Business
         fields=[
             'id',
             'owner_id',
@@ -10,9 +39,42 @@ class BusinessSerializer(serializers.ModelSerializer):
             'phone_number',
             'email',
             'address',
+            'services',
             'description',
             'category_id'
         ]
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Categories
+        fields = [
+            'id',
+            'name',
+        ]
+
+
+class TimetableSimpleSerializer(serializers.ModelSerializer):
+    sanses = SansSerializer(many=True)
+    class Meta:
+        model = TimeTable
+        fields=[
+            'id',
+            'name',
+        ]
+
+# class BusinessSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model=Business
+#         fields=[
+#             'id',
+#             'owner_id',
+#             'name',
+#             'phone_number',
+#             'email',
+#             'address',
+#             'description',
+#             'category_id'
+#         ]
 # class LoginSerializer(serializers.ModelSerializer):
 #     tracks = serializers.HyperlinkedRelatedField(
 #             many=True,
