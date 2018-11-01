@@ -23,7 +23,7 @@ class SansController:
 
         # make a list of weekdays date in our format
         this_week_days_date = []
-        weekday_date=start_week_date;
+        weekday_date=start_week_date
         for i in range(7):
             weekday_date.__str__().replace('-', '/')
             this_week_days_date.append(weekday_date.__str__().replace('-', '/'))
@@ -43,6 +43,9 @@ class SansController:
                 for reserved in reserved_sanses:
                     if (sans.id == reserved.sans.id):
                         is_reserved = True
-        result[sans.weekday].append({"sans":sans,"is_reserved": is_reserved});
+        result[sans.weekday].append({"sans":sans,"is_reserved": is_reserved})
 
         return result
+
+
+
