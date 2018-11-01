@@ -23,7 +23,8 @@ class SansSerializer(serializers.ModelSerializer):
             'id',
             'start_time',
             'end_time',
-            'timetable',
+            'timetable_id',
+            'weekday',
         ]
 
 

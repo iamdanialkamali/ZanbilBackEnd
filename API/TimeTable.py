@@ -11,13 +11,14 @@ class TimeTableController(APIView):
     @staticmethod
     def makeTimeTable(days,business_id):
 
-        timeTable = TimeTable.objects.create(business_id=business_id)
+        timeTable = TimeTable.objects.create(business_id=business_id,sans_count=0)
         today = datetime.date.today()
 
-        for day in days:
-            weekday = 0
+        weekday = 0
 
-            if(day['open']==1):
+        for day in days:
+
+            if(day['open']=="1"):
 
                 start_time = day['start_time'].split(":")
 
@@ -50,18 +51,17 @@ class TimeTableController(APIView):
                 delta = timedelta(hours=int(duration[0]), minutes=int(duration[1]))
 
                 while(temp_datetime +delta <= end_datetime):
-                    if(temp_datetime<rest_end_datetime and temp_datetime>rest_start_datetime):
-                        continue
-                    else:
+                    sans_end_datetime = temp_datetime +delta
 
+                    if(False==(sans_end_datetime<=rest_end_datetime and sans_end_datetime>rest_start_datetime)):
                         Sans.objects.create(weekday=weekday,
-                                            start_time = temp_datetime.time().__str__()
-                                            ,end_time=end_datetime.time().__str__()
-                                            ,time_table=timeTable)
+                                            start_time = temp_datetime.time().__str__()[:5]
+                                            ,end_time= sans_end_datetime.time().__str__()[:5]
+                                            ,timetable=timeTable)
 
-                    temp_datetime + delta
+                    temp_datetime += delta
 
-            weekday += 1
+                weekday += 1
 
         return timeTable
 

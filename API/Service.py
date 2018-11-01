@@ -13,8 +13,9 @@ from .Sans import SansController
 class ServiceController(APIView):
     def put(self, request, format=None, *args, **kwargs):
 
-        try:
+        # try:
             user_id = tokenizer.meta_encode(request.META)
+            print(request.body)
             data = json.loads(request.body)
             name = data['name']
             description = data['description']
@@ -36,13 +37,15 @@ class ServiceController(APIView):
 
             sanses = SansController.getSansForWeek(timetable.id)
 
+
             service_data = ServiceSerializer(myService).data
+
             return Response({'service':service_data,
                             'timetable' : sanses}
                                 , status=status.HTTP_200_OK)
-        except Exception :
-            return Response({},status=status.HTTP_400_BAD_REQUEST)
-
+        # except Exception :
+        #     return Response({},status=status.HTTP_400_BAD_REQUEST)
+        #
 
     def get(self, request, format=None, *args, **kwargs):
         try:
