@@ -19,6 +19,7 @@ from django.urls import path
 from API.Authentication import AuthentiationController
 from API.Business import BusinessController
 from API.Service import ServiceController
+from API.Category import CategoryController
 
 from rest_framework.urlpatterns import format_suffix_patterns
 
@@ -27,6 +28,7 @@ urlpatterns = [
     path('api/auth/',AuthentiationController.as_view()),
     path('api/business/',BusinessController.as_view()),
     path('api/service/', ServiceController.as_view()),
+    path('api/category/', CategoryController.as_view()),
 
 ]
 

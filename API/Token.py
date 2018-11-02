@@ -17,7 +17,8 @@ class Tokenizer:
     @staticmethod
     def user_token_generator(user):
         message = {
-            'id': user.id
+            'id': user.id,
+            'active':True
         }
         encoded = jwt.encode(message, TOKEN_KEY, algorithm='HS256')
         return { "jwt" :encoded}
@@ -28,4 +29,4 @@ class Tokenizer:
         token = meta['HTTP_AUTHORIZATION'].split(' ')[1]
         message = jwt.decode(token, TOKEN_KEY, algorithms=['HS256'])
 
-        return message['id']
+        return message
