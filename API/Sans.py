@@ -46,7 +46,7 @@ class SansController:
                     is_reserved = True
             result[sans.weekday].append({"sans":SansSerializer(sans).data,"is_reserved": is_reserved})
 
-        return result,start_week_date.__str__().split('-','/')
+        return (result,start_week_date.__str__().replace('-','/'))
 
 
 
