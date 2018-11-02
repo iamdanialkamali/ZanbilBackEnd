@@ -43,6 +43,19 @@ class BusinessSerializer(serializers.ModelSerializer):
             'description',
             'category_id'
         ]
+class BusinessSimpleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Business
+        fields=[
+            'id',
+            'owner_id',
+            'name',
+            'phone_number',
+            'email',
+            'address',
+            'description',
+            'category_id'
+        ]
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:

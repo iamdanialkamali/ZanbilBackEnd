@@ -2,7 +2,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .Serializer import BusinessSerializer
+from .Serializer import BusinessSimpleSerializer
 
 from .models import Business
 import json
@@ -15,7 +15,7 @@ class CategoryController(APIView):
 
             id = request.GET['category_id']
             business=Business.objects.filter(category_id=id)
-            business_data=BusinessSerializer(business,many=True).data
+            business_data=BusinessSimpleSerializer(business,many=True).data
             return Response(business_data, status= status.HTTP_200_OK)
 
         except Exception:
