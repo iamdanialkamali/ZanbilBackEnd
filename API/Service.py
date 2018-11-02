@@ -14,7 +14,7 @@ from .Sans import SansController
 class ServiceController(APIView):
     def put(self, request, format=None, *args, **kwargs):
 
-        # try:
+        try:
             user_id = tokenizer.meta_encode(request.META)
             print(request.body)
             data = json.loads(request.body)
@@ -44,27 +44,27 @@ class ServiceController(APIView):
             return Response({'service':service_data,
                             'timetable' : sanses}
                                 , status=status.HTTP_200_OK)
-        # except Exception :
-        #     return Response({},status=status.HTTP_400_BAD_REQUEST)
-        #
+        except Exception :
+            return Response({},status=status.HTTP_400_BAD_REQUEST)
+
 
     def get(self, request, format=None, *args, **kwargs):
-       # try:
+        try:
             id = request.GET['service_id']
             service=Services.objects.get(pk=id)
 
             service_data=ServiceSerializer(service).data
             timetable = TimeTable.objects.get(services__id=service.id)
             today = JalaliDate.today().__str__().replace('-','/')
-            sanses = SansController.getSansForPage(timetable_id=timetable.id,date=today)
+            sanses,start_of_week_date = SansController.getSansForPage(timetable_id=timetable.id,date=today)
+
             return Response({"service":service_data,
-                             "sanses":sanses
-                             }
-                            , status= status.HTTP_200_OK)
+                             "sanses":sanses,
+                             "start_of_week_date":start_of_week_date},
+                            status= status.HTTP_200_OK)
 
-
-        #except Exception:
-         #   return Response({}, status= status.HTTP_400_BAD_REQUEST)
+        except Exception:
+           return Response({}, status= status.HTTP_400_BAD_REQUEST)
 
     def post(self, request, format=None, *args, **kwargs):
         try:
@@ -76,12 +76,13 @@ class ServiceController(APIView):
             # id = request.POST['service_id']
 
             timetable = TimeTable.objects.get(services__id=service.id)
-            sanses =SansController.getSansForPage(timetable_id=timetable.id,date=date)
+            sanses,start_of_week_date =SansController.getSansForPage(timetable_id=timetable.id,date=date)
 
             return Response({"service": service_data,
-                             "sanses": sanses
-                             }
+                             "sanses": sanses,
+                             "start_of_week_date":start_of_week_date}
                             , status=status.HTTP_200_OK)
         except Exception:
+
             return Response({}, status= status.HTTP_400_BAD_REQUEST)
 
