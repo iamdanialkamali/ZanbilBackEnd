@@ -67,7 +67,7 @@ class ServiceController(APIView):
            return Response({}, status= status.HTTP_400_BAD_REQUEST)
 
     def post(self, request, format=None, *args, **kwargs):
-        # try:
+        try:
             data = json.loads(request.body)
             date = data['date']
             id = data['service_id']
@@ -82,7 +82,6 @@ class ServiceController(APIView):
                              "sanses": sanses,
                              "start_of_week_date":start_of_week_date}
                             , status=status.HTTP_200_OK)
-        # except Exception:
-
-            # return Response({}, status= status.HTTP_400_BAD_REQUEST)
+        except Exception:
+             return Response({}, status= status.HTTP_400_BAD_REQUEST)
 
