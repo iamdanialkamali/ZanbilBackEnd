@@ -69,14 +69,19 @@ class ServiceController(APIView):
     def post(self, request, format=None, *args, **kwargs):
         try:
             data = json.loads(request.body)
-            id = request.GET['service_id']
-            service=Services.objects.get(pk=id)
             date = data['date']
+            id = data['service_id']
+            service = Services.objects.get(pk=id)
             service_data=ServiceSerializer(service).data
-            timetable = TimeTable.objects.get(services__id=service.id)
-            SansController.getSansForPage(timetable_id=timetable.id,date=date)
-            return Response(service_data, status= status.HTTP_200_OK)
+            # id = request.POST['service_id']
 
+            timetable = TimeTable.objects.get(services__id=service.id)
+            sanses =SansController.getSansForPage(timetable_id=timetable.id,date=date)
+
+            return Response({"service": service_data,
+                             "sanses": sanses
+                             }
+                            , status=status.HTTP_200_OK)
         except Exception:
             return Response({}, status= status.HTTP_400_BAD_REQUEST)
 
