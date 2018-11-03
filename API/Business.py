@@ -13,7 +13,7 @@ class BusinessController(APIView):
 
 
          try:
-            user_id = tokenizer.meta_encode(request.META)
+            user_id = tokenizer.meta_decode(request.META)
             data = json.loads(request.body)
             name = data['name']
             phone_number = data['phone_number']
