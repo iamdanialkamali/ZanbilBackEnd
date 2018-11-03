@@ -20,7 +20,7 @@ class BusinessController(APIView):
             email = data['email']
             address = data['address']
             description = data['description']
-            category = int(data['category'])
+            category = data['category']
 
             if(True):
                 mybusiness = Business.objects.create(
@@ -30,7 +30,7 @@ class BusinessController(APIView):
                     email = email,
                     address = address,
                     description = description,
-                    category_id=category,
+                    category_id = category
 
                 )
 

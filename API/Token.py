@@ -29,4 +29,4 @@ class Tokenizer:
         token = meta['HTTP_AUTHORIZATION'].split(' ')[1]
         message = jwt.decode(token, TOKEN_KEY, algorithms=['HS256'])
 
-        return message
+        return message['id']
