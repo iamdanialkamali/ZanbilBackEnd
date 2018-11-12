@@ -15,7 +15,7 @@ class CategoryController(APIView):
 
             id = request.GET['category_id']
             business=Business.objects.filter(category_id=id)
-            business_data=BusinessSimpleSerializer(business,many=True).data
+            business_data=BusinessSimpleSerializer  (business,many=True).data
             return Response(business_data, status= status.HTTP_200_OK)
 
         except Exception:

@@ -1,22 +1,22 @@
-from khayyam import  JalaliDate
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from .Serializer import *
-
-from .models import Services
 import json
-from .Token import Tokenizer as tokenizer
-from .TimeTable import TimeTableController
+
+from khayyam import JalaliDate
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from .Sans import SansController
+from .Serializer import *
+from .TimeTable import TimeTableController
+from .Token import Tokenizer as tokenizer
+from .models import Services
+
 
 class ServiceController(APIView):
     def put(self, request, format=None, *args, **kwargs):
 
         try:
-            user_id = tokenizer.meta_encode(request.META)
-            print(request.body)
+            user_id = tokenizer.meta_decode(request.META)
             data = json.loads(request.body)
             name = data['name']
             description = data['description']
@@ -36,7 +36,7 @@ class ServiceController(APIView):
                     timetable=timetable,
                 )
 
-            sanses = SansController.getSansForWeek(timetable.id)
+            sanses,start_week_date = SansController.getSansForWeek(timetable.id)
 
 
             service_data = ServiceSerializer(myService).data
@@ -52,7 +52,7 @@ class ServiceController(APIView):
         try:
             id = request.GET['service_id']
             service=Services.objects.get(pk=id)
-
+            Services.objects.get().filter('')
             service_data=ServiceSerializer(service).data
             timetable = TimeTable.objects.get(services__id=service.id)
             today = JalaliDate.today().__str__().replace('-','/')
@@ -67,7 +67,7 @@ class ServiceController(APIView):
            return Response({}, status= status.HTTP_400_BAD_REQUEST)
 
     def post(self, request, format=None, *args, **kwargs):
-        # try:
+        try:
             data = json.loads(request.body)
             date = data['date']
             id = data['service_id']
@@ -82,7 +82,6 @@ class ServiceController(APIView):
                              "sanses": sanses,
                              "start_of_week_date":start_of_week_date}
                             , status=status.HTTP_200_OK)
-        # except Exception:
-
-            # return Response({}, status= status.HTTP_400_BAD_REQUEST)
+        except Exception:
+             return Response({}, status= status.HTTP_400_BAD_REQUEST)
 

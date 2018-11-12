@@ -54,10 +54,10 @@ class TimeTableController(APIView):
                     sans_end_datetime = temp_datetime +delta
 
                     if(False==(sans_end_datetime<=rest_end_datetime and sans_end_datetime>rest_start_datetime)):
-                        Sans.objects.create(weekday=weekday,
-                                            start_time = temp_datetime.time().__str__()[:5]
-                                            ,end_time= sans_end_datetime.time().__str__()[:5]
-                                            ,timetable=timeTable)
+                            Sans.objects.create(weekday=weekday,
+                                                start_time = temp_datetime.time().__str__()[:5]
+                                                ,end_time= sans_end_datetime.time().__str__()[:5]
+                                                ,timetable=timeTable)
 
                     temp_datetime += delta
 

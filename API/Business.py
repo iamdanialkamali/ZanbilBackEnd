@@ -13,14 +13,14 @@ class BusinessController(APIView):
 
 
          try:
-            user_id = tokenizer.meta_encode(request.META)
+            user_id = tokenizer.meta_decode(request.META)
             data = json.loads(request.body)
             name = data['name']
             phone_number = data['phone_number']
             email = data['email']
             address = data['address']
             description = data['description']
-            category = int(data['category'])
+            category = data['category']
 
             if(True):
                 mybusiness = Business.objects.create(
@@ -30,7 +30,7 @@ class BusinessController(APIView):
                     email = email,
                     address = address,
                     description = description,
-                    category_id=category,
+                    category_id = category
 
                 )
 

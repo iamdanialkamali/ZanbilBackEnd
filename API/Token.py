@@ -24,9 +24,9 @@ class Tokenizer:
         return { "jwt" :encoded}
 
     @staticmethod
-    def meta_encode(meta):
+    def meta_decode(meta):
 
         token = meta['HTTP_AUTHORIZATION'].split(' ')[1]
         message = jwt.decode(token, TOKEN_KEY, algorithms=['HS256'])
 
-        return message
+        return message['id']
