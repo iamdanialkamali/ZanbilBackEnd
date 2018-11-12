@@ -47,7 +47,6 @@ class ServiceController(APIView):
         except Exception :
             return Response({},status=status.HTTP_400_BAD_REQUEST)
 
-
     def get(self, request, format=None, *args, **kwargs):
         try:
             id = request.GET['service_id']
@@ -85,3 +84,42 @@ class ServiceController(APIView):
         except Exception:
              return Response({}, status= status.HTTP_400_BAD_REQUEST)
 
+
+class SearchController(APIView):
+    def post(self, request, format=None, *args, **kwargs):
+        # try:
+            data = json.loads(request.body)
+            service_name = data['service_name']
+            business_name = data['business_name']
+            min_price = data['min_price']
+            max_price = data['max_price']
+            category = data['category']
+            serivce_list = Services.objects.select_related()
+
+            if (service_name!=''):
+                serivce_list = serivce_list.filter(
+                    name=service_name
+                )
+
+            if (business_name!=''):
+                serivce_list = serivce_list.filter(
+                    business__name__contains= business_name
+                )
+
+            if (min_price!='' and max_price!=''):
+                min_price = int(min_price)
+                max_price = int(max_price)
+                serivce_list = serivce_list.filter(
+                    fee__range=[min_price,max_price]
+                )
+                print(serivce_list[2].business.category.id)
+            if (category!=''):
+                category = int(category)
+                serivce_list = serivce_list.filter(
+                    business__category__id__exact=category
+                )
+            serivce_data = ServiceSearchSerializer(serivce_list,many=True).data
+            return Response(serivce_data, status=status.HTTP_200_OK)
+
+        # except Exception:
+        #     return Response({}, status=status.HTTP_400_BAD_REQUEST)

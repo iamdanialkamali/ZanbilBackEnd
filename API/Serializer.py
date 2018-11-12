@@ -15,7 +15,6 @@ class ServiceSerializer(serializers.ModelSerializer):
             'description',
         ]
 
-
 class SansSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sans
@@ -74,6 +73,23 @@ class TimetableSimpleSerializer(serializers.ModelSerializer):
             'id',
             'name',
         ]
+
+
+
+class ServiceSearchSerializer(serializers.ModelSerializer):
+    business = BusinessSimpleSerializer()
+    class Meta:
+        model = Services
+        fields=[
+            'id',
+            'business',
+            'name',
+            'fee',
+            'rating',
+            'timetable',
+            'description',
+        ]
+
 
 # class BusinessSerializer(serializers.ModelSerializer):
 #     class Meta:

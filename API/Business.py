@@ -50,7 +50,3 @@ class BusinessController(APIView):
 
         except Exception:
             return Response({}, status= status.HTTP_400_BAD_REQUEST)
-
-
-    def patch(self, request, format=None, *args, **kwargs):
-        pass
