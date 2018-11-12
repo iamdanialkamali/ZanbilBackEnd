@@ -52,7 +52,7 @@ class ServiceController(APIView):
         try:
             id = request.GET['service_id']
             service=Services.objects.get(pk=id)
-
+            Services.objects.get().filter('')
             service_data=ServiceSerializer(service).data
             timetable = TimeTable.objects.get(services__id=service.id)
             today = JalaliDate.today().__str__().replace('-','/')
