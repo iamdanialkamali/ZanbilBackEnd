@@ -2,9 +2,9 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .Serializer import BusinessSerializer
+from .Serializer import ReviewSerializer
 
-from .models import Business
+from .models import Review,Services
 import json
 from .Token import Tokenizer as tokenizer
 class ReviewController(APIView):
@@ -14,33 +14,37 @@ class ReviewController(APIView):
             data = json.loads(request.body)
             point = float(data['point'])
             description = data['description']
-            category = data['business_id']
+            service_id = data['service_id']
 
             if(True):
-                mybusiness = Business.objects.create(
-                    owner_id = user_id,
-                    name = name,
-                    phone_number= phone_number,
-                    email = email,
-                    address = address,
-                    description = description,
-                    category_id = category
-
+                self.newPointCalculator(service_id,point)
+                my_review = Review.objects.create(
+                    user_id=user_id,
+                    description=description,
+                    service_id=service_id,
+                    rating=point
                 )
 
-            business_data = BusinessSerializer(mybusiness).data
-            return Response(business_data, status=status.HTTP_200_OK)
+
+
+            return Response({}, status=status.HTTP_200_OK)
 
          except Exception :
-             return Response({},status=status.HTTP_400_BAD_REQUEST)
+             return Response({}, status=status.HTTP_400_BAD_REQUEST)
     def get(self, request, format=None, *args, **kwargs):
 
         try:
-
             id = request.GET['business_id']
-            business=Business.objects.get(pk=id)
-            business_data=BusinessSerializer(business).data
-            return Response(business_data, status= status.HTTP_200_OK)
+            reviews = Review.objects.filter(service__business__id=id)
+
+            review_datas = ReviewSerializer(reviews,many=True)
+            return Response(review_datas, status= status.HTTP_200_OK)
 
         except Exception:
             return Response({}, status= status.HTTP_400_BAD_REQUEST)
+    @staticmethod
+    def newPointCalculator(service_id,point):
+        service = Services.objects.get(pk=service_id)
+        service.rating = (service.rating*service.review_count + point)/(service.review_count+1)
+        service.review_count = service.review_count + 1
+        service.save(force_update=True)
