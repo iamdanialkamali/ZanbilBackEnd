@@ -16,7 +16,7 @@ class ReviewController(APIView):
             description = data['description']
             service_id = data['service_id']
 
-            if(True):
+            if 0 <= point <= 10 :
                 self.newPointCalculator(service_id,point)
                 my_review = Review.objects.create(
                     user_id=user_id,
@@ -24,8 +24,8 @@ class ReviewController(APIView):
                     service_id=service_id,
                     rating=point
                 )
-
-
+            else:
+                return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
             return Response({}, status=status.HTTP_200_OK)
 
