@@ -20,7 +20,7 @@ from API.Authentication import AuthentiationController
 from API.Business import BusinessController
 from API.Service import ServiceController,SearchController
 from API.Category import CategoryController
-
+from API.Review import ReviewController
 from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = [
@@ -30,6 +30,8 @@ urlpatterns = [
     path('api/service/', ServiceController.as_view()),
     path('api/service/search/',SearchController.as_view()),
     path('api/category/', CategoryController.as_view()),
+
+    path('api/service/review/',ReviewController.as_view()),
 
 ]
 
