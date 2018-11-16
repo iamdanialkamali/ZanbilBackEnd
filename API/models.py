@@ -88,8 +88,8 @@ class Review(models.Model):
     id = models.AutoField(primary_key=True)
     description = models.CharField(max_length=600, default='test')
     rating = models.FloatField()
-    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    service = models.ForeignKey(Services, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING,related_name='reviews')
+    service = models.ForeignKey(Services, on_delete=models.DO_NOTHING,related_name='reviews')
 
     def __str__(self):
         return self.description
