@@ -112,7 +112,6 @@ class SearchController(APIView):
                 serivce_list = serivce_list.filter(
                     fee__range=[min_price,max_price]
                 )
-                print(serivce_list[2].business.category.id)
             if (category!=''):
                 category = int(category)
                 serivce_list = serivce_list.filter(
