@@ -94,7 +94,21 @@ class SearchController(APIView):
             min_price = data['min_price']
             max_price = data['max_price']
             category = data['category']
-            serivce_list = Services.objects.select_related()
+            search = False
+
+            for i in data.values() :
+                if i !='':
+                    search = True
+
+            if(search):
+                serivce_list = Services.objects
+
+            else:
+                return Response([], status=status.HTTP_200_OK)
+
+
+
+
 
             if (service_name!=''):
                 serivce_list = serivce_list.filter(
@@ -106,12 +120,14 @@ class SearchController(APIView):
                     business__name__contains= business_name
                 )
 
-            if (min_price!='' and max_price!=''):
+            if (min_price!=''):
                 min_price = int(min_price)
-                max_price = int(max_price)
                 serivce_list = serivce_list.filter(
-                    fee__range=[min_price,max_price]
+                    fee__gte=min_price
                 )
+            if(max_price!= ''):
+                max_price = int(max_price)
+                serivce_list = serivce_list.filter(fee__lte=max_price)
             if (category!=''):
                 category = int(category)
                 serivce_list = serivce_list.filter(
