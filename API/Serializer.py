@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Business, Services, TimeTable, Sans, Categories,Review,User
+from .models import Business, Services, TimeTable, Sans, Categories,Review,User,Reserves
 
 class ServiceSerializer(serializers.ModelSerializer):
 
@@ -79,7 +79,6 @@ class UsernameSerializer(serializers.ModelSerializer):
         fields = [
             'username',
         ]
-
 
 
 class ReviewSerializer(serializers.ModelSerializer):

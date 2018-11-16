@@ -31,6 +31,7 @@ urlpatterns = [
     path('api/service/search/',SearchController.as_view()),
     path('api/category/', CategoryController.as_view()),
     path('api/service/review/',ReviewController.as_view()),
+    path('api/user/',)
 
 ]
 
