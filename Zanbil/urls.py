@@ -33,6 +33,7 @@ urlpatterns = [
     path('api/category/', CategoryController.as_view()),
     path('api/service/review/',ReviewController.as_view()),
     path('api/user/',AccountPageController.as_view()),
+    path('api/service/reserve/',ServiceController.)
 
 ]
 
