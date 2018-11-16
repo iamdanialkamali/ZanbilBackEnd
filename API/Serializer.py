@@ -80,7 +80,15 @@ class UsernameSerializer(serializers.ModelSerializer):
             'username',
         ]
 
-
+class ReservesSerializer(serializers.ModelSerializer):
+    service = ServiceSerializer()
+    class Meta:
+        model = Reserves
+        fields=[
+            'date'
+            'description',
+            'service'
+        ]
 class ReviewSerializer(serializers.ModelSerializer):
     user = UsernameSerializer()
     class Meta:
