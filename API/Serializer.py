@@ -76,9 +76,12 @@ class TimetableSimpleSerializer(serializers.ModelSerializer):
 class UsernameSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fileds = [
-            'username'
+        fields = [
+            'username',
         ]
+
+
+
 class ReviewSerializer(serializers.ModelSerializer):
     user = UsernameSerializer()
     class Meta:
@@ -87,7 +90,7 @@ class ReviewSerializer(serializers.ModelSerializer):
             'id',
             'user',
             'description',
-            'point',
+            'rating',
         ]
 
 

@@ -33,15 +33,15 @@ class ReviewController(APIView):
              return Response({}, status=status.HTTP_400_BAD_REQUEST)
     def get(self, request, format=None, *args, **kwargs):
 
-        try:
+        # try:
             id = request.GET['business_id']
             reviews = Review.objects.filter(service__business__id=id)
 
-            review_datas = ReviewSerializer(reviews,many=True)
+            review_datas = ReviewSerializer(reviews,many=True).data
             return Response(review_datas, status= status.HTTP_200_OK)
 
-        except Exception:
-            return Response({}, status= status.HTTP_400_BAD_REQUEST)
+        # except Exception:
+        #     return Response({}, status= status.HTTP_400_BAD_REQUEST)
     @staticmethod
     def newPointCalculator(service_id,point):
         service = Services.objects.get(pk=service_id)
