@@ -85,7 +85,7 @@ class ReservesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reserves
         fields=[
-            'date'
+            'date',
             'description',
             'service'
         ]
@@ -99,8 +99,6 @@ class ReviewSerializer(serializers.ModelSerializer):
             'description',
             'rating',
         ]
-
-
 
 class ServiceSearchSerializer(serializers.ModelSerializer):
     business = BusinessSimpleSerializer()

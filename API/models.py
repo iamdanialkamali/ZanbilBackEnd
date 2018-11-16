@@ -77,7 +77,7 @@ class Services(models.Model):
 
 class Reserves(models.Model):
     id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(Users, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     service = models.ForeignKey(to=Services, on_delete=models.DO_NOTHING, null=True)
     sans = models.ForeignKey(Sans, on_delete=models.DO_NOTHING, null=True, blank=True)
     description = models.TextField()
