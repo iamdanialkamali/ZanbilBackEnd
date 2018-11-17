@@ -84,6 +84,8 @@ class Reserves(models.Model):
     date = models.CharField(max_length=150)
 
 
+
+
 class Review(models.Model):
     id = models.AutoField(primary_key=True)
     description = models.CharField(max_length=600, default='test')

@@ -19,15 +19,18 @@ class ReserveController(APIView):
         try:
             user_id = tokenizer.meta_decode(request.META)
             data = json.loads(request.body)
-
             description = data['description']
             sans_id = data['sans_id']
             service_id = data['service_id']
             date = data['date']
-            if (True):
+
+            if (len(Reserves.objects.filter(sans_id=sans_id,
+                                         date=date,
+                                        service_id=service_id).values()) == 0):
                 reserve = Reserves.objects.create(user_id=user_id, description=description, sans_id=sans_id, date=date,
                                                   service_id=service_id)
-
+            else:
+                raise Exception
             reserve_data = ReservesSerializer(reserve).data
             return Response(reserve_data
                             , status=status.HTTP_200_OK)
