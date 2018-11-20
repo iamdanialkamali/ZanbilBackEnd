@@ -5,12 +5,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .Sans import SansController
-from .models import Reserves
 from .Serializer import *
-from .TimeTable import TimeTableController
 from .Token import Tokenizer as tokenizer
-from .models import Services
 
 
 class ReserveController(APIView):
@@ -25,8 +21,8 @@ class ReserveController(APIView):
             date = data['date']
 
             if (len(Reserves.objects.filter(sans_id=sans_id,
-                                         date=date,
-                                        service_id=service_id).values()) == 0):
+                                            date=date,
+                                            service_id=service_id).values()) == 0):
                 reserve = Reserves.objects.create(user_id=user_id, description=description, sans_id=sans_id, date=date,
                                                   service_id=service_id)
             else:
@@ -35,5 +31,5 @@ class ReserveController(APIView):
             return Response(reserve_data
                             , status=status.HTTP_200_OK)
 
-        except Exception :
-            return Response({},status=status.HTTP_400_BAD_REQUEST)
+        except Exception:
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
