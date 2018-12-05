@@ -1,8 +1,8 @@
 from kavenegar import *
 
 from django.core.mail import send_mail
-
-class EmailController(APIView):
+from .models import User,Sans
+class EmailController:
     @staticmethod
     def sendNotification(email ,data):
         message = "Your Resreve Has been set on\n " + data.date + "\n " +data.time
@@ -23,3 +23,6 @@ class SMSController:
         }
         api.sms_send(params)
         return 1
+    # @staticmethod
+    # def getNotificaionData(user_id,sans_id,date):
+    #

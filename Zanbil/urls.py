@@ -37,7 +37,7 @@ urlpatterns = [
     path('api/service/review/',ReviewController.as_view()),
     path('api/user/',AccountPageController.as_view()),
     path('api/service/reserve/',ReserveController.as_view()),
-    path('test/sms/',SMSController.as_view())
+    # path('test/sms/',SMSController.as_view())
 
 ]
 
