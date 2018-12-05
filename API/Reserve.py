@@ -24,9 +24,12 @@ class ReserveController(APIView):
                                             date=date,
                                             service_id=service_id).values()) == 0):
 
-                reserve = Reserves.objects.create(user_id=user_id, description=description, sans_id=sans_id, date=date,
+                reserve = Reserves.objects.create(user_id=user_id,
+                                                  description=description,
+                                                  sans_id=sans_id,
+                                                  date=date,
                                                   service_id=service_id)
-                SMSController.sendNotification(user_id,sans_id,date)
+                SMSController.Notify(user_id,sans_id,date)
             else:
                 raise Exception
             reserve_data = ReservesSerializer(reserve).data

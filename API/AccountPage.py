@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .Serializer import BusinessSimpleSerializer,ReservesSerializer
 
-from .models import Review,User,Reserves,Business
+from .models import Review,User,Reserves,Business,Users
 import json
 from .Token import Tokenizer as tokenizer
 class AccountPageController(APIView):
@@ -15,7 +15,7 @@ class AccountPageController(APIView):
 
             reserves = Reserves.objects.filter(user_id=user_id).order_by('date')
 
-            user =User.objects.get(pk=user_id)
+            user =Users.objects.get(pk=user_id)
 
             businseses = Business.objects.filter(owner_id=user_id)
 
