@@ -23,7 +23,6 @@ from API.Category import CategoryController
 from API.Review import ReviewController
 from API.AccountPage import AccountPageController
 from API.Reserve import ReserveController
-from API.Notification import SMSController
 
 from rest_framework.urlpatterns import format_suffix_patterns
 
