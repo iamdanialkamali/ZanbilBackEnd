@@ -12,7 +12,7 @@ from .Token import Tokenizer as tokenizer
 class ReserveController(APIView):
     def put(self, request, format=None, *args, **kwargs):
 
-        # try:
+        try:
             user_id = tokenizer.meta_decode(request.META)
             data = json.loads(request.body)
             description = data['description']
@@ -36,5 +36,5 @@ class ReserveController(APIView):
             return Response(reserve_data
                             , status=status.HTTP_200_OK)
 
-        # except Exception:
-        #     return Response({}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception:
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
