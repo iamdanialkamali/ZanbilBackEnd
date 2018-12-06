@@ -98,7 +98,7 @@ class Review(models.Model):
 
 class Picture(models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField(null=True, max_length=200)
+    # name = models.CharField(null=True, max_length=200)
     business = models.ForeignKey(to=Business, on_delete=models.DO_NOTHING, null=True, related_name='pictures')
     service = models.ForeignKey(to=Services, on_delete=models.DO_NOTHING, null=True, related_name='pictures')
 

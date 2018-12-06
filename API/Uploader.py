@@ -17,11 +17,11 @@ class ImageUploader(APIView):
 
         if(for_service):
             service_id = request.POST['service_id']
-            pic = Picture.objects.create(name=picture.name,service_id=service_id)
+            pic = Picture.objects.create(service_id=service_id)
 
         else:
             business_id = request.POST['business_id']
-            pic = Picture.objects.create(name=picture.name, business_id=business_id)
+            pic = Picture.objects.create(business_id=business_id)
 
         file = open("uploads/" + str(pic.id), 'wb')
 
