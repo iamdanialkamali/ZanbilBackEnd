@@ -90,7 +90,7 @@ class ServiceController(APIView):
 
 class SearchController(APIView):
     def post(self, request, format=None, *args, **kwargs):
-        # try:
+        try:
             data = json.loads(request.body)
             service_name = data['service_name']
             business_name = data['business_name']
