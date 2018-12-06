@@ -45,8 +45,7 @@ class TimeTable(models.Model):
     id = models.AutoField(primary_key=True)
     business  = models.ForeignKey(to= Business,on_delete=models.DO_NOTHING,related_name='timetables')
     sans_count = models.IntegerField()
-    # work_days = ArrayField(models.IntegerField(blank=True), blank=True)
-    # rest_times = ArrayField(models.IntegerField(blank=True), blank=True)
+
 
 
 class Sans(models.Model):
@@ -100,8 +99,8 @@ class Review(models.Model):
 class Picture(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(null=True, max_length=200)
-    Business = models.ForeignKey(to=Business, on_delete=models.DO_NOTHING, null=True, related_name='business')
-    Service = models.ForeignKey(to=Services, on_delete=models.DO_NOTHING, null=True, related_name='service')
+    business = models.ForeignKey(to=Business, on_delete=models.DO_NOTHING, null=True, related_name='pictures')
+    service = models.ForeignKey(to=Services, on_delete=models.DO_NOTHING, null=True, related_name='pictures')
 
 class Test(models.Model):
     name = models.CharField(max_length =100)
