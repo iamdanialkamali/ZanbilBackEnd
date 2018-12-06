@@ -10,9 +10,12 @@ from .Serializer import *
 from .TimeTable import TimeTableController
 from .Token import Tokenizer as tokenizer
 from .models import Services
+from rest_framework.parsers import MultiPartParser
 
 
 class ServiceController(APIView):
+    parser_classes = (MultiPartParser,)
+
     def put(self, request, format=None, *args, **kwargs):
 
         try:
@@ -50,8 +53,7 @@ class ServiceController(APIView):
     def get(self, request, format=None, *args, **kwargs):
         try:
             id = request.GET['service_id']
-            service=Services.objects.get(pk=id)
-            Services.objects.get().filter('')
+            service=Services.objects.get(id=id)
             service_data=ServiceSerializer(service).data
             timetable = TimeTable.objects.get(services__id=service.id)
             today = JalaliDate.today().__str__().replace('-','/')
@@ -67,6 +69,7 @@ class ServiceController(APIView):
 
     def post(self, request, format=None, *args, **kwargs):
         try:
+
             data = json.loads(request.body)
             date = data['date']
             id = data['service_id']
@@ -136,5 +139,5 @@ class SearchController(APIView):
             serivce_data = ServiceSearchSerializer(serivce_list,many=True).data
             return Response(serivce_data, status=status.HTTP_200_OK)
 
-        # except Exception:
-        #     return Response({}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception:
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
