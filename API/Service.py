@@ -87,6 +87,40 @@ class ServiceController(APIView):
         except Exception:
              return Response({}, status= status.HTTP_400_BAD_REQUEST)
 
+    def patch(self, request, format=None, *args, **kwargs):
+
+        '''
+                for editing service
+                get name description fee and
+                sanses(start_time,end_time,sans_id,is_deleted) as json
+                '''
+        try:
+            data = json.loads(request.body)
+            name = data['name']
+            description = data['description']
+            fee = data['fee']
+            sanses = data['sanses']
+            id = data['id']
+
+            # edit name and fee and description
+            selectedService = Services.objects.get(pk=id)
+            selectedService.name = name
+            selectedService.fee = fee
+            selectedService.description = description
+            selectedService.save(force_update=True)
+
+            # edit sanses
+            for sans in sanses:
+                selectedSans = Sans.objects.get(pk=sans['sans_id'])
+                if sans['is_deleted'] == "1":
+                    selectedSans.delete()
+                else:
+                    selectedSans.start_time = sans['start_time']
+                    selectedSans.end_time = sans['end_time']
+                    selectedSans.save(force_update=True)
+            return Response({}, status=status.HTTP_200_OK)
+        except Exception:
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
 class SearchController(APIView):
     def post(self, request, format=None, *args, **kwargs):
