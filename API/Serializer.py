@@ -1,8 +1,19 @@
 from rest_framework import serializers
 from .models import Business, Services, TimeTable, Sans, Categories,Review,Users,Reserves,Picture
 
-class ServiceSerializer(serializers.ModelSerializer):
 
+class PictureSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Picture
+        fields=[
+            'id',
+
+        ]
+
+
+class ServiceSerializer(serializers.ModelSerializer):
+    pictures = PictureSerializer(many=True)
     class Meta:
         model = Services
         fields=[
@@ -13,7 +24,9 @@ class ServiceSerializer(serializers.ModelSerializer):
             'rating',
             'timetable',
             'description',
+            'pictures',
         ]
+
 
 class SansSerializer(serializers.ModelSerializer):
     class Meta:
@@ -29,6 +42,7 @@ class SansSerializer(serializers.ModelSerializer):
 
 class BusinessSerializer(serializers.ModelSerializer):
     services = ServiceSerializer(many=True)
+    pictures = PictureSerializer(many=True)
     class Meta:
         model = Business
         fields=[
@@ -40,7 +54,8 @@ class BusinessSerializer(serializers.ModelSerializer):
             'address',
             'services',
             'description',
-            'category_id'
+            'category_id',
+            'pictures',
         ]
 class BusinessSimpleSerializer(serializers.ModelSerializer):
     class Meta:
