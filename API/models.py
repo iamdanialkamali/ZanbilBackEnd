@@ -102,7 +102,6 @@ class Picture(models.Model):
     name = models.CharField(null=True, max_length=200)
     Business = models.ForeignKey(to=Business, on_delete=models.DO_NOTHING, null=True, related_name='business')
     Service = models.ForeignKey(to=Services, on_delete=models.DO_NOTHING, null=True, related_name='service')
-    image = models.ImageField(blank=True)
 
 class Test(models.Model):
     name = models.CharField(max_length =100)
