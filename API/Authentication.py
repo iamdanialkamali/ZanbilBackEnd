@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from .models import Users
 
 import json
 
@@ -20,7 +21,8 @@ class AuthentiationController(APIView):
 
             username = data["username"]
             password = data['password']
-            user = User.objects.get(username=username)
+
+            user = Users.objects.get(username=username)
             is_user = user.check_password(raw_password=password)
 
             if(is_user):
@@ -37,20 +39,21 @@ class AuthentiationController(APIView):
             return Response('NOT FOUND',status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, format=None, *args, **kwargs):
-        try:
+        # try:
             data = json.loads(request.body)
             username = data['username']
             password = data['password']
             email = data['email']
+            phone_number = data["phone_number"]
 #            print(data)
             if(True): ##TODO: DATAValidation
 
-                user = User.objects.create_user(username,email,password)
+                user = Users.objects.create_user(username,email,password,phone_number=phone_number)
                 return Response(tokenizer.user_token_generator(user),status.HTTP_201_CREATED)
 
             else:
 
                 return Response({}, status=status.HTTP_400_BAD_REQUEST)##TODO:Serializer
 
-        except Exception:
-            return Response({}, status=status.HTTP_409_CONFLICT)##TODO:Serializer
+        # except Exception:
+        #     return Response({}, status=status.HTTP_409_CONFLICT)##TODO:Serializer

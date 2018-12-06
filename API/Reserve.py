@@ -4,7 +4,7 @@ from khayyam import JalaliDate
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+from .Notification import NotificationController
 from .Serializer import *
 from .Token import Tokenizer as tokenizer
 
@@ -23,8 +23,13 @@ class ReserveController(APIView):
             if (len(Reserves.objects.filter(sans_id=sans_id,
                                             date=date,
                                             service_id=service_id).values()) == 0):
-                reserve = Reserves.objects.create(user_id=user_id, description=description, sans_id=sans_id, date=date,
+
+                reserve = Reserves.objects.create(user_id=user_id,
+                                                  description=description,
+                                                  sans_id=sans_id,
+                                                  date=date,
                                                   service_id=service_id)
+                NotificationController.Notify(user_id,sans_id,date)
             else:
                 raise Exception
             reserve_data = ReservesSerializer(reserve).data

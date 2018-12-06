@@ -137,6 +137,16 @@ USE_L10N = True
 USE_TZ = True
 
 
+###EMAIL
+
+EMAIL_HOST = 'smtp.mailgun.org'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'postmaster@sandboxeb808a33cc074adb9fb924eef69c024a.mailgun.org'
+EMAIL_HOST_PASSWORD = '38cb8489a464b105a58b33bc088dcf2f-52cbfb43-0d14c081'
+EMAIL_USE_TLS = True
+#######SMS
+SMS_KEY = "434D634935754F355537366E526570396666524B41584A61752F426F79415944	"
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 

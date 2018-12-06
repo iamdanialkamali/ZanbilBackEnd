@@ -22,7 +22,7 @@ class Categories(models.Model):
 
 
 class Business(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True)
+    owner = models.ForeignKey(Users, on_delete=models.DO_NOTHING, null=True)
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     phone_number = models.TextField(max_length=15)
@@ -77,7 +77,7 @@ class Services(models.Model):
 
 class Reserves(models.Model):
     id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(Users, on_delete=models.DO_NOTHING)
     service = models.ForeignKey(to=Services, on_delete=models.DO_NOTHING, null=True)
     sans = models.ForeignKey(Sans, on_delete=models.DO_NOTHING, null=True, blank=True)
     description = models.TextField()
@@ -90,7 +90,7 @@ class Review(models.Model):
     id = models.AutoField(primary_key=True)
     description = models.CharField(max_length=600, default='test')
     rating = models.FloatField()
-    user = models.ForeignKey(User, on_delete=models.DO_NOTHING,related_name='reviews')
+    user = models.ForeignKey(Users, on_delete=models.DO_NOTHING,related_name='reviews')
     service = models.ForeignKey(Services, on_delete=models.DO_NOTHING,related_name='reviews')
 
     def __str__(self):

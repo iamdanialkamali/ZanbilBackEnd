@@ -23,6 +23,8 @@ from API.Category import CategoryController
 from API.Review import ReviewController
 from API.AccountPage import AccountPageController
 from API.Reserve import ReserveController
+from API.views import TEST
+
 from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = [
@@ -34,7 +36,8 @@ urlpatterns = [
     path('api/category/', CategoryController.as_view()),
     path('api/service/review/',ReviewController.as_view()),
     path('api/user/',AccountPageController.as_view()),
-    path('api/service/reserve/',ReserveController.as_view())
+    path('api/service/reserve/',ReserveController.as_view()),
+    path('test/',TEST.as_view())
 
 ]
 
