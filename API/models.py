@@ -97,11 +97,11 @@ class Review(models.Model):
         return self.description
 
 
-class pics(models.Model):
+class Picture(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(null=True, max_length=200)
-    Business = models.ForeignKey(to=Business, on_delete=models.CASCADE, null=True, related_name='business')
-    Service = models.ForeignKey(to=Services, on_delete=models.CASCADE, null=True, related_name='service')
+    Business = models.ForeignKey(to=Business, on_delete=models.DO_NOTHING, null=True, related_name='business')
+    Service = models.ForeignKey(to=Services, on_delete=models.DO_NOTHING, null=True, related_name='service')
     image = models.ImageField(blank=True)
 
 class Test(models.Model):
