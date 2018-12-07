@@ -122,6 +122,9 @@ class DashboardController(APIView):
 
 
             return Response({
+                    "increaseReservePercentageForWeek":1,
+                    "increaseReservePercentageForMonth":1,
+                    "increaseReservePercentageForDay":1,
                     "busySanses":busySanses,
                     "customers":customers,
                     "allReservations":allReserves,
