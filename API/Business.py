@@ -10,8 +10,6 @@ from .Token import Tokenizer as tokenizer
 class BusinessController(APIView):
     def put(self, request, format=None, *args, **kwargs):
             # user_id = tokenizer.meta_encode(request.META)
-
-
          try:
             user_id = tokenizer.meta_decode(request.META)
             data = json.loads(request.body)
@@ -31,7 +29,6 @@ class BusinessController(APIView):
                     address = address,
                     description = description,
                     category_id = category
-
                 )
 
             business_data = BusinessSerializer(mybusiness).data
@@ -50,3 +47,32 @@ class BusinessController(APIView):
 
         except Exception:
             return Response({}, status= status.HTTP_400_BAD_REQUEST)
+
+    def patch(self, request, format=None, *args, **kwargs):
+         '''
+         for editing business
+         '''
+         try:
+            data = json.loads(request.body)
+            name = data['name']
+            phone_number = data['phone_number']
+            email = data['email']
+            address = data['address']
+            description = data['description']
+            category = data['category']
+            id = data['id']
+
+            if(True):
+                selectedBusiness = Business.objects.get(pk=id)
+                selectedBusiness.name = name
+                selectedBusiness.phone_number= phone_number
+                selectedBusiness.email = email
+                selectedBusiness.address = address
+                selectedBusiness.description = description
+                selectedBusiness.category_id = category
+                selectedBusiness.save(force_update=True)
+
+            return Response({}, status=status.HTTP_200_OK)
+
+         except Exception :
+             return Response({},status=status.HTTP_400_BAD_REQUEST)

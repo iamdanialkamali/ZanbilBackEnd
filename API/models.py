@@ -35,7 +35,7 @@ class Business(models.Model):
     #image =models.ImageField(default='2.jpg')
 
     def __str__(self):
-        return self.name
+        return str(self.id)
 
     def calculateScore(self, sc):
         return (self.score + sc) / 2
