@@ -35,12 +35,62 @@ class DashboardController(APIView):
 
 
             #find all reserves for this mounth
-            thisMonthReserves=Reserves.objects.filter(service__business__id=business.id , date__contains=today[:7])
-            numReservesInMonth=len(thisMonthReserves)
+            currentMonthReserves=Reserves.objects.filter(service__business__id=business.id , date__contains=today[:7])
+            numReservesInMonth=len(currentMonthReserves)
 
-            #reserves_data=ReservesSerializer(currentWeekReserves,many=True).data
 
+            #find popularServices
+            popularServices=[]
+            services=Services.objects.filter(business__id=business.id)
+            for service in services:
+                Tname=service.name
+                cMonthRes=Reserves.objects.filter(service__id=service.id , date__contains=today[:7])
+                TnumberOfReservesInCurrentMonth=len(cMonthRes)
+                cWeekRes=Reserves.objects.filter(service__id=service.id , date__in=this_week_days_date)
+                TnumberOfReservesInCurrentWeek=len(cWeekRes)
+                popularServices.append({
+                    "name":Tname,
+                    "numberOfReservesInCurrentMonth":TnumberOfReservesInCurrentMonth,
+                    "TnumberOfReservesInCurrentWeek":TnumberOfReservesInCurrentWeek
+                })
+                popularServices = sorted(popularServices, key=lambda k: k['numberOfReservesInCurrentMonth'],reverse=True)
+
+            #FIND coming reserves and all resrves
+            upcomingReserves=[]
+            allReserves=[]
+            for service in services:
+                reserves=Reserves.objects.filter(service__id=service.id)
+                for reserve in reserves:
+                         isComing=False
+                        #next years
+                         if int(reserve.date[:4])>int(today[:4]):
+                            isComing=True
+                        #next months in same year
+                         elif int(reserve.date[:4])==int(today[:4]) and int(reserve.date[5:7])>int(today[5:7]):
+                            isComing=True
+                        #next days in same month
+                         elif int(reserve.date[:4])==int(today[:4]) and int(reserve.date[5:7])==int(today[5:7]) and int(reserve.date[8:])>=int(today[8:]):
+                            isComing=True
+                         if isComing :
+                            upcomingReserves.append({
+                            "serviceName":service.name,
+                            "date":reserve.date,
+                            "start_time":reserve.sans.start_time,
+                            "end_time":reserve.sans.end_time,
+                            })
+                         allReserves.append({
+                            "serviceName":service.name,
+                            "date":reserve.date,
+                            "start_time":reserve.sans.start_time,
+                            "end_time":reserve.sans.end_time,
+                            })
+
+            upcomingReserves=sorted(upcomingReserves,key=lambda k: k['date'])
+            allReserves=sorted(allReserves,key=lambda k: k['date'])
             return Response({
+                "allReservations":allReserves,
+                "upcomingReservations":upcomingReserves,
+                "popularServices":popularServices,
                 "numberOfReservesInDay":numReservesInDay,
                 "numberOfReservesInCurrentMonth":numReservesInMonth,
                 "numberOfReservesInCurrentWeek":numReservesInWeek,
@@ -48,8 +98,6 @@ class DashboardController(APIView):
 
         #except Exception:
          #   return Response({}, status= status.HTTP_400_BAD_REQUEST)
-
-
 
     def patch(self, request, format=None, *args, **kwargs):
          '''
