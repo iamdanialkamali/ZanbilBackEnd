@@ -1,13 +1,13 @@
+from django.db.models import Count
 from khayyam import  JalaliDate
 from datetime import timedelta
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .Serializer import BusinessSerializer,ServiceSerializer,ReservesSerializer
+
+from .models import Review, Services, Sans, Reserves
 
 from .models import Business,Services,Reserves,Users
-import json
-from .Token import Tokenizer as tokenizer
 
 
 class DashboardController(APIView):
@@ -104,15 +104,31 @@ class DashboardController(APIView):
 
 
 
+
+
+            sanses = Reserves.objects.filter(sans__reserves__service__business=business).values('sans_id')
+            sanses = sanses.annotate(Count('sans_id'))
+
+            sanses_ids = []
+            for sans in sanses:
+                sanses_ids.append(sans['sans_id'])
+            sans_objects = Sans.objects.filter(id__in=sanses_ids)
+            final_list = []
+            for sans in sans_objects.values():
+                temp_sans = sans
+
+                temp_sans['count'] = sanses.get(sans_id=sans['id'])['sans_id__count']  ##addes Count
+                final_list.append(temp_sans)
+            
             return Response({
-                "customers":customers,
-                "allReservations":allReserves,
-                "upcomingReservations":upcomingReserves,
-                "popularServices":popularServices,
-                "numberOfReservesInDay":numReservesInDay,
-                "numberOfReservesInCurrentMonth":numReservesInMonth,
-                "numberOfReservesInCurrentWeek":numReservesInWeek,
-            }, status= status.HTTP_200_OK)
+                    "customers":customers,
+                    "allReservations":allReserves,
+                    "upcomingReservations":upcomingReserves,
+                    "popularServices":popularServices,
+                    "numberOfReservesInDay":numReservesInDay,
+                    "numberOfReservesInCurrentMonth":numReservesInMonth,
+                    "numberOfReservesInCurrentWeek":numReservesInWeek,
+                }, status= status.HTTP_200_OK)
 
 
         #except Exception:
