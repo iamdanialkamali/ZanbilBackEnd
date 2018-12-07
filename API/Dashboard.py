@@ -105,7 +105,7 @@ class DashboardController(APIView):
 
 
 
-
+            #bussy sanses
             sanses = Reserves.objects.filter(sans__reserves__service__business=business).values('sans_id')
             sanses = sanses.annotate(Count('sans_id'))
 
@@ -113,14 +113,16 @@ class DashboardController(APIView):
             for sans in sanses:
                 sanses_ids.append(sans['sans_id'])
             sans_objects = Sans.objects.filter(id__in=sanses_ids)
-            final_list = []
+            busySanses = []
             for sans in sans_objects.values():
                 temp_sans = sans
 
                 temp_sans['count'] = sanses.get(sans_id=sans['id'])['sans_id__count']  ##addes Count
-                final_list.append(temp_sans)
-            
+                busySanses.append(temp_sans)
+
+
             return Response({
+                    "busySanses":busySanses,
                     "customers":customers,
                     "allReservations":allReserves,
                     "upcomingReservations":upcomingReserves,
