@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .Serializer import BusinessSerializer,ServiceSerializer,ReservesSerializer
 
-from .models import Business,Services,Reserves
+from .models import Business,Services,Reserves,Users
 import json
 from .Token import Tokenizer as tokenizer
 
@@ -84,10 +84,28 @@ class DashboardController(APIView):
                             "start_time":reserve.sans.start_time,
                             "end_time":reserve.sans.end_time,
                             })
-
             upcomingReserves=sorted(upcomingReserves,key=lambda k: k['date'])
             allReserves=sorted(allReserves,key=lambda k: k['date'])
+
+            #customers
+            customers=[]
+            customers_ids=Reserves.objects.filter(service__business__id=business.id).values_list('user', flat=True)
+            customers_ids=set(customers_ids)
+            for id in customers_ids:
+                customer=Users.objects.get(pk=id)
+                customers.append(
+                    {
+                        "firstname":customer.first_name,
+                        "lastname":customer.last_name,
+                        "Email":customer.email,
+                        "phone_number":customer.phone_number
+                    }
+                )
+
+
+
             return Response({
+                "customers":customers,
                 "allReservations":allReserves,
                 "upcomingReservations":upcomingReserves,
                 "popularServices":popularServices,
@@ -96,34 +114,6 @@ class DashboardController(APIView):
                 "numberOfReservesInCurrentWeek":numReservesInWeek,
             }, status= status.HTTP_200_OK)
 
+
         #except Exception:
          #   return Response({}, status= status.HTTP_400_BAD_REQUEST)
-
-    def patch(self, request, format=None, *args, **kwargs):
-         '''
-         for editing business
-         '''
-         try:
-            data = json.loads(request.body)
-            name = data['name']
-            phone_number = data['phone_number']
-            email = data['email']
-            address = data['address']
-            description = data['description']
-            category = data['category']
-            id = data['id']
-
-            if(True):
-                selectedBusiness = Business.objects.get(pk=id)
-                selectedBusiness.name = name
-                selectedBusiness.phone_number= phone_number
-                selectedBusiness.email = email
-                selectedBusiness.address = address
-                selectedBusiness.description = description
-                selectedBusiness.category_id = category
-                selectedBusiness.save(force_update=True)
-
-            return Response({}, status=status.HTTP_200_OK)
-
-         except Exception :
-             return Response({},status=status.HTTP_400_BAD_REQUEST)
