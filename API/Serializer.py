@@ -93,6 +93,14 @@ class TimetableSimpleSerializer(serializers.ModelSerializer):
             'name',
         ]
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Users
+        fields = [
+            'username',
+            'email',
+            'phone_number',
+        ]
 
 class UsernameSerializer(serializers.ModelSerializer):
     class Meta:

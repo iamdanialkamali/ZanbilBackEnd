@@ -2,7 +2,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .Serializer import BusinessSimpleSerializer,ReservesSerializer
+from .Serializer import BusinessSimpleSerializer,ReservesSerializer,UserSerializer
 
 from .models import Review,User,Reserves,Business,Users
 import json
@@ -19,10 +19,8 @@ class AccountPageController(APIView):
 
             businseses = Business.objects.filter(owner_id=user_id)
 
-            return Response({'user':{
-                'user_name':user.username,
-                'full_name':user.first_name+' '+user.last_name
-                },
+            return Response({
+                'user':UserSerializer(user).data,
                 'reserves':ReservesSerializer(reserves,many=True).data,
                 'businseses':BusinessSimpleSerializer(businseses,many=True).data
 
