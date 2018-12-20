@@ -1,22 +1,21 @@
 from rest_framework import serializers
-from .models import Business, Services, TimeTable, Sans, Categories,Review,Users,Reserves,Picture
+from .models import Business, Services, TimeTable, Sans, Categories, Review, Users, Reserves, Picture
 
 
 class PictureSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Picture
-        fields=[
+        fields = [
             'id',
-
         ]
 
 
 class ServiceSerializer(serializers.ModelSerializer):
     pictures = PictureSerializer(many=True)
+
     class Meta:
         model = Services
-        fields=[
+        fields = [
             'id',
             'business',
             'name',
@@ -43,9 +42,10 @@ class SansSerializer(serializers.ModelSerializer):
 class BusinessSerializer(serializers.ModelSerializer):
     services = ServiceSerializer(many=True)
     pictures = PictureSerializer(many=True)
+
     class Meta:
         model = Business
-        fields=[
+        fields = [
             'id',
             'owner_id',
             'name',
@@ -57,10 +57,13 @@ class BusinessSerializer(serializers.ModelSerializer):
             'category_id',
             'pictures',
         ]
+
+
 class BusinessSimpleSerializer(serializers.ModelSerializer):
+    pictures = PictureSerializer(many=True)
     class Meta:
         model = Business
-        fields=[
+        fields = [
             'id',
             'owner_id',
             'name',
@@ -68,8 +71,10 @@ class BusinessSimpleSerializer(serializers.ModelSerializer):
             'email',
             'address',
             'description',
-            'category_id'
+            'category_id',
+            'pictures'
         ]
+
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -82,12 +87,23 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class TimetableSimpleSerializer(serializers.ModelSerializer):
     sanses = SansSerializer(many=True)
+
     class Meta:
         model = TimeTable
-        fields=[
+        fields = [
             'id',
             'name',
         ]
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Users
+        fields = [
+            'username',
+            'email',
+            'phone_number',
+        ]
+
 class UsernameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Users
@@ -95,17 +111,23 @@ class UsernameSerializer(serializers.ModelSerializer):
             'username',
         ]
 
+
 class ReservesSerializer(serializers.ModelSerializer):
     service = ServiceSerializer()
+    sans = SansSerializer()
     class Meta:
         model = Reserves
-        fields=[
+        fields = [
             'date',
             'description',
-            'service'
+            'service',
+            'sans',
         ]
+
+
 class ReviewSerializer(serializers.ModelSerializer):
     user = UsernameSerializer()
+
     class Meta:
         model = Review
         fields = [
@@ -115,11 +137,13 @@ class ReviewSerializer(serializers.ModelSerializer):
             'rating',
         ]
 
+
 class ServiceSearchSerializer(serializers.ModelSerializer):
     business = BusinessSimpleSerializer()
+    pictures = PictureSerializer()
     class Meta:
         model = Services
-        fields=[
+        fields = [
             'id',
             'business',
             'name',
@@ -127,8 +151,8 @@ class ServiceSearchSerializer(serializers.ModelSerializer):
             'rating',
             'timetable',
             'description',
+            'pictures',
         ]
-
 
 # class BusinessSerializer(serializers.ModelSerializer):
 #     class Meta:

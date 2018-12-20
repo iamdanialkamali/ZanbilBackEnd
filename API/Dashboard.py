@@ -1,9 +1,10 @@
 from django.db.models import Count
-from khayyam import  JalaliDate
+from khayyam import  JalaliDate,JalaliDatetime
 from datetime import timedelta
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from .Serializer import ReservesSerializer
 
 from .models import Review, Services, Sans, Reserves
 
@@ -11,9 +12,13 @@ from .models import Business,Services,Reserves,Users
 
 class DashboardController(APIView):
     def get(self, request, format=None, *args, **kwargs):
-        try:
+        # try:
+
             business_id = request.GET['id']
             today = JalaliDate.today()
+            # reserves = Reserves.objects.filter(service_business__id=business_id)
+            #
+            # business = Business.objects.get(pk=business_id)
 
             #find all reserves for today
             numReservesInDay=self.findAllReservesForADay(today,business_id)
@@ -25,8 +30,9 @@ class DashboardController(APIView):
             #calculate increaseReservePercentageForDay
             increaseReservePercentageForDay=0
             if numReservesInYesterday!=0:
-                increaseReservePercentageForDay=((numReservesInDay-numReservesInYesterday)/numReservesInYesterday)*100
-
+                increaseReservePercentageForDay = ((numReservesInDay-numReservesInYesterday)/numReservesInYesterday)*100
+            else:
+                increaseReservePercentageForDay = 100
             #find all reserves for current week
             numReservesInWeek=self.findAllReservesForAWeek(today,business_id)
 
@@ -37,7 +43,8 @@ class DashboardController(APIView):
             increaseReservePercentageForWeek=0
             if numReservesInLastWeek!=0:
                 increaseReservePercentageForWeek=((numReservesInWeek-numReservesInLastWeek)/numReservesInLastWeek)*100
-
+            else:
+                increaseReservePercentageForWeek = 100
             #find all reserves for current mounth
             numReservesInMonth=self.findAllReservesForAMonth(today,business_id)
 
@@ -49,7 +56,8 @@ class DashboardController(APIView):
             increaseReservePercentageForMonth=0
             if numReservesInLastMonth!=0:
                 increaseReservePercentageForMonth=((numReservesInMonth-numReservesInLastMonth)/numReservesInLastMonth)*100
-
+            else:
+                increaseReservePercentageForMonth = 100
 
             #find popularServices
             popularServices = self.findPopularServices(today,business_id)
@@ -81,8 +89,8 @@ class DashboardController(APIView):
                 }, status= status.HTTP_200_OK)
 
 
-        except Exception:
-            return Response({}, status= status.HTTP_400_BAD_REQUEST)
+        # except Exception:
+        #     return Response({}, status= status.HTTP_400_BAD_REQUEST)
 
 
     @staticmethod
@@ -106,30 +114,51 @@ class DashboardController(APIView):
     def getUpcomingReserves(day,business_id):
         upcomingReserves=[]
         services=Services.objects.filter(business__id=business_id)
-        todayS=day.__str__()
-        for service in services:
-            reserves=Reserves.objects.filter(service__id=service.id)
-            for reserve in reserves:
-                    isComing=False
-                    #next years
-                    if int(reserve.date[:4])>int(todayS[:4]):
-                        isComing=True
-                    #next months in same year
-                    elif int(reserve.date[:4])==int(todayS[:4]) and int(reserve.date[5:7])>int(todayS[5:7]):
-                        isComing=True
-                        #next days in same month
-                    elif int(reserve.date[:4])==int(todayS[:4]) and int(reserve.date[5:7])==int(todayS[5:7]) and int(reserve.date[8:])>=int(todayS[8:]):
-                        isComing=True
-                    if isComing :
-                        upcomingReserves.append({
-                        "serviceName":service.name,
-                        "date":reserve.date,
-                        "start_time":reserve.sans.start_time,
-                        "end_time":reserve.sans.end_time,
-                        })
 
-            upcomingReserves=sorted(upcomingReserves,key=lambda k: k['date'])
-            return upcomingReserves
+        #now = JalaliDate.today()
+        now = JalaliDatetime.now()
+        reserves = Reserves.objects.filter(service__business__id=business_id)
+        for reserve in reserves:
+                splited_date = reserve.date.split('-')
+                splited_time = reserve.sans.start_time.split(':')
+                reserve_time = JalaliDatetime(
+                    int(splited_date[0]),
+                    int(splited_date[1]),
+                    int(splited_date[2]),
+                    int(splited_time[0]),
+                    int(splited_time[1]),
+                    0
+                )
+
+                if(reserve_time > now):
+                    upcomingReserves.append(
+                        ReservesSerializer(reserve).data
+                    )
+
+                # isComing=False
+                # #next years
+                # if int(reserve.date[:4])>int(todayS[:4]):
+                #     isComing=True
+                # #next months in same year
+                # elif int(reserve.date[:4])==int(todayS[:4]) and int(reserve.date[5:7])>int(todayS[5:7]):
+                #     isComing=True
+                #     #next days in same month
+                # elif int(reserve.date[:4])==int(todayS[:4]) and int(reserve.date[5:7])==int(todayS[5:7]) and int(reserve.date[8:])>=int(todayS[8:]):
+                #     isComing=True
+                # if isComing :
+
+                # upcomingReserves.append({
+                #     "serviceName": reserve.,
+                #     "date": reserve.date,
+                #     "start_time": reserve.sans.start_time,
+                #     "end_time": reserve.sans.end_time,
+                # })
+
+
+
+
+        upcomingReserves=sorted(upcomingReserves,key=lambda k: k['date'])
+        return upcomingReserves
 
     @staticmethod
     def findAllReservesForADay(day,business_id):
@@ -180,7 +209,7 @@ class DashboardController(APIView):
                     "TnumberOfReservesInCurrentWeek":TnumberOfReservesInCurrentWeek
                 })
             popularServices = sorted(popularServices, key=lambda k: k['numberOfReservesInCurrentMonth'],reverse=True)
-            return popularServices
+            return popularServices[0:3]
 
     @staticmethod
     def findCustomers(business_id):
