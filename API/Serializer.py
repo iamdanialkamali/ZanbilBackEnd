@@ -60,6 +60,7 @@ class BusinessSerializer(serializers.ModelSerializer):
 
 
 class BusinessSimpleSerializer(serializers.ModelSerializer):
+    pictures = PictureSerializer(many=True)
     class Meta:
         model = Business
         fields = [
@@ -70,7 +71,8 @@ class BusinessSimpleSerializer(serializers.ModelSerializer):
             'email',
             'address',
             'description',
-            'category_id'
+            'category_id',
+            'pictures'
         ]
 
 
