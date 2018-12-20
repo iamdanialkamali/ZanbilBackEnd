@@ -114,13 +114,14 @@ class UsernameSerializer(serializers.ModelSerializer):
 
 class ReservesSerializer(serializers.ModelSerializer):
     service = ServiceSerializer()
-
+    sans = SansSerializer()
     class Meta:
         model = Reserves
         fields = [
             'date',
             'description',
-            'service'
+            'service',
+            'sans',
         ]
 
 
