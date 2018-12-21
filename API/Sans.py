@@ -41,10 +41,10 @@ class SansController:
         for sans in selected_sanses:
 
             is_reserved = False
-            if(start_week_date < JalaliDate.today()):
+            if(start_week_date < JalaliDate.today()-timedelta(today_weekday)):
                 is_reserved = True
 
-            elif(start_week_date == JalaliDate.today()-timedelta(today_weekday) and  sans.weekday<=today_weekday  ):
+            elif(start_week_date == JalaliDate.today()-timedelta(today_weekday) and  sans.weekday<today_weekday  ):
                 is_reserved = True
             else:
                 for reserved in reserved_sanses:
