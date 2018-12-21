@@ -21,7 +21,7 @@ class SansController:
         date_splited = date.split('/')
         Jdate = JalaliDate(int(date_splited[0]), int(date_splited[1]), int(date_splited[2]))
         start_week_date = Jdate - timedelta(days=Jdate.weekday())
-        today_weekday = JalaliDate.weekday()
+        today_weekday = JalaliDate.today().weekday()
         # make a list of weekdays date in our format
         this_week_days_date = []
         weekday_date=start_week_date
@@ -41,7 +41,10 @@ class SansController:
         for sans in selected_sanses:
 
             is_reserved = False
-            if(sans.weekday>today_weekday):
+            if(start_week_date < JalaliDate.today()):
+                is_reserved = True
+
+            elif(start_week_date == JalaliDate.today()-timedelta(today_weekday) and  sans.weekday<=today_weekday  ):
                 is_reserved = True
             else:
                 for reserved in reserved_sanses:
