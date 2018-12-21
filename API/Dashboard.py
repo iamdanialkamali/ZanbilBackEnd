@@ -209,7 +209,7 @@ class DashboardController(APIView):
                     "TnumberOfReservesInCurrentWeek":TnumberOfReservesInCurrentWeek
                 })
             popularServices = sorted(popularServices, key=lambda k: k['numberOfReservesInCurrentMonth'],reverse=True)
-            return popularServices[0:3]
+        return popularServices[0:3]
 
     @staticmethod
     def findCustomers(business_id):
