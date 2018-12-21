@@ -36,7 +36,7 @@ class ServiceController(APIView):
                     fee=price,
                     business_id=business_id,
                     rating=10,
-                    timetable=timetable,
+                    timetable_id=timetable.id,
                 )
 
             sanses,start_week_date = SansController.getSansForWeek(timetable.id)

@@ -16,7 +16,6 @@ class TimeTableController(APIView):
         weekday = 0
 
         for day in days:
-
             if(day['open']=="1"):
 
                 start_time = day['start_time'].split(":")
@@ -60,7 +59,7 @@ class TimeTableController(APIView):
 
                     temp_datetime += delta
 
-                weekday += 1
+            weekday += 1
 
         return timeTable
 
