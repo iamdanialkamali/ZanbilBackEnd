@@ -8,8 +8,7 @@ class NotificationController:
     def Notify(user_id, sans_id, date):
         user = Users.objects.get(id=user_id)
         sans = Sans.objects.get(id=sans_id)
-        message = "Resreve Has been set on\n " + date + "\n " +sans.start_time +" to  " +sans.end_time
-        + "\n for business "sans.timetable.business.name +" \n at address  " +sans.timetable.business.address
+        message = "Resreve Has been set on\n " + date + "\n " +sans.start_time +" to  " +sans.end_time + "\n for business "sans.timetable.business.name +" \n at address  " +sans.timetable.business.address
 
         NotificationController.sendEmail(user.email,message)
         NotificationController.sendEmail(sans.timetable.business.email,message)
