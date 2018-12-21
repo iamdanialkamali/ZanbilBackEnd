@@ -119,7 +119,7 @@ class DashboardController(APIView):
         now = JalaliDatetime.now()
         reserves = Reserves.objects.filter(service__business__id=business_id)
         for reserve in reserves:
-                splited_date = reserve.date.split('-')
+                splited_date = reserve.date.split('/')
                 splited_time = reserve.sans.start_time.split(':')
                 reserve_time = JalaliDatetime(
                     int(splited_date[0]),
