@@ -34,24 +34,21 @@ class SansController:
             timetable__id=timetable_id).order_by('start_time')
 
         # get reserved sanses in given week
-        reserved_sanses = Reserves.objects.filter(date__in=this_week_days_date)
+        # reserved_sanses = Reserves.objects.filter(date__in=this_week_days_date)
         reserved_sanses = Reserves.objects.filter(date__in=this_week_days_date)
         #exmine are seleted sanses reserved
         result=[[],[],[],[],[],[],[]]
         for sans in selected_sanses:
-
             is_reserved = False
             if(start_week_date < JalaliDate.today()-timedelta(today_weekday)):
                 is_reserved = True
 
             elif(start_week_date == JalaliDate.today()-timedelta(today_weekday) and  sans.weekday<today_weekday  ):
                 is_reserved = True
-            else:
-                for reserved in reserved_sanses:
-                    if (sans.id == reserved.sans.id):
-                        is_reserved = True
-
-            result[sans.weekday].append({"sans":SansSerializer(sans).data,"is_reserved": is_reserved})
+            capacity = sans.capacity - len(reserved_sanses.filter(sans_id = sans.id ).values())
+            if(capacity==0):
+                is_reserved = True
+            result[sans.weekday].append({"sans":SansSerializer(sans).data,"is_reserved": is_reserved , 'capacity':capacity})
 
         return (result,start_week_date.__str__().replace('-','/'))
 

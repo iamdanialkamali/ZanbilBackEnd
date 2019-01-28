@@ -36,6 +36,7 @@ class SansSerializer(serializers.ModelSerializer):
             'end_time',
             'timetable_id',
             'weekday',
+            'capacity',
         ]
 
 

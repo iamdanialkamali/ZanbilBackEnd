@@ -19,10 +19,11 @@ class ReserveController(APIView):
             sans_id = data['sans_id']
             service_id = data['service_id']
             date = data['date']
+            sans = Sans.objects.get(pk=sans_id)
 
             if (len(Reserves.objects.filter(sans_id=sans_id,
                                             date=date,
-                                            service_id=service_id).values()) == 0):
+                                            service_id=service_id).values()) < sans.capacity):
 
                 reserve = Reserves.objects.create(user_id=user_id,
                                                   description=description,

@@ -54,6 +54,7 @@ class Sans(models.Model):
     end_time = models.CharField(default="00:00",max_length=5)
     timetable = models.ForeignKey(to=TimeTable, on_delete=models.DO_NOTHING,related_name='sanses')
     weekday = models.PositiveIntegerField(null=True)
+    capacity =  models.PositiveIntegerField(default=1)
 
     def __str__(self):
         return str(self.start_time) + 'to' + str(self.end_time)
