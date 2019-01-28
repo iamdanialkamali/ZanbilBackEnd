@@ -19,7 +19,7 @@ class ReserveController(APIView):
             sans_id = data['sans_id']
             service_id = data['service_id']
             date = data['date']
-            sans = Sans.objects.filter(pk=sans_id)
+            sans = Sans.objects.get(pk=sans_id)
 
             if (len(Reserves.objects.filter(sans_id=sans_id,
                                             date=date,
