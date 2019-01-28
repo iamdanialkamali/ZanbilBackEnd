@@ -24,6 +24,8 @@ class TimeTableController(APIView):
 
                 duration = day['duration'].split(":")
 
+                capacity = day['capacity']
+
 
                 temp_time = datetime.time(hour=int(start_time[0]), minute=int(start_time[1]))
                 temp_datetime = datetime.datetime.combine(today, temp_time)
@@ -55,7 +57,9 @@ class TimeTableController(APIView):
                             Sans.objects.create(weekday=weekday,
                                                 start_time = temp_datetime.time().__str__()[:5]
                                                 ,end_time= sans_end_datetime.time().__str__()[:5]
-                                                ,timetable=timeTable)
+                                                ,timetable=timeTable
+                                                ,capacity = capacity
+                                                    )
 
                     temp_datetime += delta
 
