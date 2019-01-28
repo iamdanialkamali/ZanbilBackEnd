@@ -32,20 +32,21 @@ class ReserveController(APIView):
             reserves = Reserves.objects.filter(sans_id=sans_id,
                                             date=date,
                                             service_id=service_id).values()
-            full = len(reserves) >= sans.capacity
-            if ( not full and verified):
-                
+            free = len(reserves) < sans.capacity
+            if ( free and verified):
+
                 reserve = Reserves.objects.create(user_id=user_id,
                                                   description=description,
                                                   sans_id=sans_id,
                                                   date=date,
                                                   service_id=service_id)
-                NotificationController.Notify(user_id,sans_id,date)
+                # NotificationController.Notify(user_id,sans_id,date)
+                reserve_data = ReservesSerializer(reserve).data
+                return Response(reserve_data
+                            , status=status.HTTP_200_OK)
+
             else:
                 raise Exception
-            reserve_data = ReservesSerializer(reserve).data
-            return Response(reserve_data
-                            , status=status.HTTP_200_OK)
 
         except Exception:
             return Response({}, status=status.HTTP_400_BAD_REQUEST)

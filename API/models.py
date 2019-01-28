@@ -72,7 +72,7 @@ class Services(models.Model):
     review_count = models.IntegerField(default=0)
     is_protected = models.BooleanField(default=False)
     password = models.CharField(max_length=500)
-    cancelation_range = models.CharField(default="00:00",max_length=5)
+    cancellation_range = models.CharField(default="00:00",max_length=5)
     def __str__(self):
         return self.name
 

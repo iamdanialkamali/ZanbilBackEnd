@@ -19,7 +19,7 @@ class ServiceController(APIView):
 
     def put(self, request, format=None, *args, **kwargs):
 
-        try:
+        # try:
             user_id = tokenizer.meta_decode(request.META)
             data = json.loads(request.body)
             name = data['name']
@@ -47,7 +47,8 @@ class ServiceController(APIView):
                     password = hased_pass
                 )
 
-            sanses,start_week_date = SansController.getSansForWeek(timetable.id)
+            
+            sanses = SansController.getSansForWeek(timetable.id)
 
 
             service_data = ServiceSerializer(myService).data
@@ -55,8 +56,8 @@ class ServiceController(APIView):
             return Response({'service':service_data,
                             'timetable' : sanses}
                                 , status=status.HTTP_200_OK)
-        except Exception :
-            return Response({},status=status.HTTP_400_BAD_REQUEST)
+        # except Exception :
+        #     return Response({},status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request, format=None, *args, **kwargs):
         try:
@@ -118,6 +119,7 @@ class ServiceController(APIView):
             selectedService.name = name
             selectedService.fee = fee
             selectedService.description = description
+            
             if( not old_password==""):
                 valid = encryptor.verify(old_password,selectedSans.password)
                 if(valid):
