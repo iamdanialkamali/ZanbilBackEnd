@@ -12,6 +12,7 @@ from .Token import Tokenizer as tokenizer
 from .models import Services
 from rest_framework.parsers import MultiPartParser
 
+from passlib.hash import pbkdf2_sha256  as encryptor
 
 class ServiceController(APIView):
     parser_classes = (MultiPartParser,)
@@ -26,9 +27,14 @@ class ServiceController(APIView):
             price = data['price']
             business_id = data['business_id']
             days = data['days']
+            is_protected =  data['is_protected']
+            password =  data['password']
+            
+            is_protected = bool(int(is_protected))
 
+            hased_pass = encryptor.encrypt(password, rounds=2000, salt_size= 16)
             timetable = TimeTableController.makeTimeTable(days,business_id)
-
+            
             if(True):
                 myService = Services.objects.create(
                     name = name,
@@ -37,6 +43,8 @@ class ServiceController(APIView):
                     business_id=business_id,
                     rating=10,
                     timetable_id=timetable.id,
+                    is_protected = is_protected,
+                    password = hased_pass
                 )
 
             sanses,start_week_date = SansController.getSansForWeek(timetable.id)
@@ -101,12 +109,19 @@ class ServiceController(APIView):
             fee = data['fee']
             sanses = data['sanses']
             id = data['id']
+            
+            old_password = data['old_password']
+            new_password = data['new_password']
 
             # edit name and fee and description
             selectedService = Services.objects.get(pk=id)
             selectedService.name = name
             selectedService.fee = fee
             selectedService.description = description
+            if( not old_password==""):
+                valid = encryptor.verify(old_password,selectedSans.password)
+                if(valid):
+                    selectedService.password = encryptor.encrypt(new_password, rounds=2000, salt_size= 16)
             selectedService.save(force_update=True)
 
             # edit sanses

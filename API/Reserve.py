@@ -9,6 +9,10 @@ from .Serializer import *
 from .Token import Tokenizer as tokenizer
 
 
+from passlib.hash import pbkdf2_sha256  as decryptor
+
+
+
 class ReserveController(APIView):
     def put(self, request, format=None, *args, **kwargs):
 
@@ -21,10 +25,16 @@ class ReserveController(APIView):
             date = data['date']
             sans = Sans.objects.get(pk=sans_id)
 
-            if (len(Reserves.objects.filter(sans_id=sans_id,
+            service = Services.objects.get(pk = service_id)
+            if(service.is_protected):
+                password = data['password']
+                verified = decryptor.verify(password,service.password)
+            reserves = Reserves.objects.filter(sans_id=sans_id,
                                             date=date,
-                                            service_id=service_id).values()) < sans.capacity):
-
+                                            service_id=service_id).values()
+            full = len(reserves) >= sans.capacity
+            if ( not full and verified):
+                
                 reserve = Reserves.objects.create(user_id=user_id,
                                                   description=description,
                                                   sans_id=sans_id,
