@@ -115,6 +115,7 @@ class ServiceController(APIView):
                 if sans['is_deleted'] == "1":
                     selectedSans.delete()
                 else:
+                    selectedSans.capacity = sans['capacity']
                     selectedSans.start_time = sans['start_time']
                     selectedSans.end_time = sans['end_time']
                     selectedSans.save(force_update=True)
