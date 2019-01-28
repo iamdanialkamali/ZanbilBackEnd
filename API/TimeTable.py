@@ -26,7 +26,6 @@ class TimeTableController(APIView):
 
                 capacity = day['capacity']
 
-
                 temp_time = datetime.time(hour=int(start_time[0]), minute=int(start_time[1]))
                 temp_datetime = datetime.datetime.combine(today, temp_time)
 
@@ -37,8 +36,6 @@ class TimeTableController(APIView):
                 rest_end_time = day['rest_end_time'].split(":")
                 rest_start__time_obj = datetime.time(hour=int(rest_start_time[0]), minute=int(rest_start_time[1]))
                 rest_end__time_obj = datetime.time(hour=int(rest_end_time[0]), minute=int(rest_end_time[1]))
-
-
 
                 if (day['rest_start_time'] != day['rest_end_time']):
                     rest_start_datetime = datetime.datetime.combine(today, rest_start__time_obj)
