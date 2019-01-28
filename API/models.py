@@ -55,7 +55,7 @@ class Sans(models.Model):
     timetable = models.ForeignKey(to=TimeTable, on_delete=models.DO_NOTHING,related_name='sanses')
     weekday = models.PositiveIntegerField(null=True)
     capacity =  models.PositiveIntegerField(default=1)
-
+    is_deleted = models.BooleanField(default=False)
     def __str__(self):
         return str(self.start_time) + 'to' + str(self.end_time)
 
@@ -70,7 +70,9 @@ class Services(models.Model):
     rating = models.FloatField(default=0)
     description = models.TextField(max_length=600, blank=True)
     review_count = models.IntegerField(default=0)
-
+    is_protected = models.BooleanField(default=False)
+    password = models.CharField(max_length=500)
+    cancellation_range = models.CharField(default="00:00",max_length=5)
     def __str__(self):
         return self.name
 
@@ -82,9 +84,7 @@ class Reserves(models.Model):
     sans = models.ForeignKey(Sans, on_delete=models.DO_NOTHING, null=True, blank=True)
     description = models.TextField()
     date = models.CharField(max_length=150)
-
-
-
+    is_cancelled = models.BooleanField(default=False)
 
 class Review(models.Model):
     id = models.AutoField(primary_key=True)
