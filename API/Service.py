@@ -26,8 +26,10 @@ class ServiceController(APIView):
             price = data['price']
             business_id = data['business_id']
             days = data['days']
+            cancellation_range=data['cancellation_range']
 
             timetable = TimeTableController.makeTimeTable(days,business_id)
+
 
             if(True):
                 myService = Services.objects.create(
@@ -37,9 +39,10 @@ class ServiceController(APIView):
                     business_id=business_id,
                     rating=10,
                     timetable_id=timetable.id,
+                    cancellation_range=cancellation_range,
                 )
 
-            sanses,start_week_date = SansController.getSansForWeek(timetable.id)
+            sanses = SansController.getSansForWeek(timetable.id)
 
 
             service_data = ServiceSerializer(myService).data
@@ -88,25 +91,26 @@ class ServiceController(APIView):
              return Response({}, status= status.HTTP_400_BAD_REQUEST)
 
     def patch(self, request, format=None, *args, **kwargs):
-
         '''
                 for editing service
-                get name description fee and
+                get name description fee cancellation_range and
                 sanses(start_time,end_time,sans_id,is_deleted) as json
                 '''
         try:
             data = json.loads(request.body)
             name = data['name']
+            cancellation_range = data['cancellation_range']
             description = data['description']
             fee = data['fee']
             sanses = data['sanses']
             id = data['id']
 
-            # edit name and fee and description
+            # edit name and fee and description and cancellation_range
             selectedService = Services.objects.get(pk=id)
             selectedService.name = name
             selectedService.fee = fee
             selectedService.description = description
+            selectedService.cancellation_range=cancellation_range
             selectedService.save(force_update=True)
 
             # edit sanses
@@ -115,7 +119,7 @@ class ServiceController(APIView):
                 if sans['is_deleted'] == "1":
                     selectedSans.delete()
                 else:
-                    selectedSans.capacity = sans['capacity']
+                    # selectedSans.capacity = /['capacity']
                     selectedSans.start_time = sans['start_time']
                     selectedSans.end_time = sans['end_time']
                     selectedSans.save(force_update=True)

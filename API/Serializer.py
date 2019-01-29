@@ -24,6 +24,7 @@ class ServiceSerializer(serializers.ModelSerializer):
             'timetable',
             'description',
             'pictures',
+            'cancellation_range',
         ]
 
 

@@ -11,7 +11,6 @@ from .Token import Tokenizer as tokenizer
 
 class ReserveController(APIView):
     def put(self, request, format=None, *args, **kwargs):
-
         try:
             user_id = tokenizer.meta_decode(request.META)
             data = json.loads(request.body)
