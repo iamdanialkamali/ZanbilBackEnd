@@ -47,7 +47,7 @@ class ServiceController(APIView):
                     rating=10,
                     timetable_id=timetable.id,
                     is_protected = is_protected,
-                    password = hased_pass
+                    password = hased_pass,
                 )
 
             
@@ -117,13 +117,19 @@ class ServiceController(APIView):
             is_protected = bool(int(data['is_protected']))
             old_password = data['old_password']
             new_password = data['new_password']
-
+            capacity_changed = data['capacity_changed']
+            
             # edit name and fee and description
             selectedService = Services.objects.get(pk=id)
             selectedService.name = name
             selectedService.fee = fee
             selectedService.description = description
-            selectedService.capacity = capacity
+
+            if(bool(capacity_changed)):
+                service_sanses = Sans.objects.filter(timetable__id=selectedService.timetable.id)
+                            
+                for sans in service_sanses:
+                    sans.capacity = capacity
             
             if(is_protected != selectedService.is_protected):
                 if(is_protected):

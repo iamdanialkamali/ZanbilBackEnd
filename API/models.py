@@ -73,6 +73,7 @@ class Services(models.Model):
     is_protected = models.BooleanField(default=False)
     password = models.CharField(max_length=500)
     cancellation_range = models.CharField(default="00:00",max_length=5)
+    
     def __str__(self):
         return self.name
 

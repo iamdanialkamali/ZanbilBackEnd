@@ -24,6 +24,8 @@ class ServiceSerializer(serializers.ModelSerializer):
             'timetable',
             'description',
             'pictures',
+            'is_protected',
+            'cancellation_range'
         ]
 
 
@@ -123,6 +125,7 @@ class ReservesSerializer(serializers.ModelSerializer):
             'description',
             'service',
             'sans',
+            'is_cancelled',
         ]
 
 
