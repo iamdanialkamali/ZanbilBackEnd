@@ -114,6 +114,7 @@ class ServiceController(APIView):
             sanses = data['sanses']
             id = data['id']
             capacity = data['capacity']
+            cancellation_range = data['cancellation_range']
             is_protected = bool(int(data['is_protected']))
             old_password = data['old_password']
             new_password = data['new_password']
@@ -123,6 +124,7 @@ class ServiceController(APIView):
             selectedService = Services.objects.get(pk=id)
             selectedService.name = name
             selectedService.fee = fee
+            selectedService.cancellation_range=cancellation_range
             selectedService.description = description
 
             if(bool(capacity_changed)):

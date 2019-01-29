@@ -26,6 +26,7 @@ from API.Reserve import ReserveController
 from API.Uploader import ImageUploader
 from API.Dashboard import DashboardController
 from API.views import TEST
+from API.Cancellation import CancellationController
 
 from rest_framework.urlpatterns import format_suffix_patterns
 
@@ -41,6 +42,7 @@ urlpatterns = [
     path('api/dashboard/',DashboardController.as_view()),
     path('api/service/reserve/',ReserveController.as_view()),
     path('api/file/picture/',ImageUploader.as_view()),
+    path('api/cancellation/',CancellationController.as_view()),
     path('test/',TEST.as_view())
 
 ]
