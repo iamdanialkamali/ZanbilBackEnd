@@ -128,9 +128,12 @@ class ServiceController(APIView):
             if(is_protected!= selectedService.is_protected):
                 if(is_protected):
                     selectedService.password = encryptor.encrypt(new_password, rounds=2000, salt_size= 16)
+                else:
+                    selectedService.is_protected = False
+                    selectedService.is_protected = ""
+                    
 
-
-            if( not old_password==""):
+            if( not (old_password=="")):
                 valid = encryptor.verify(old_password,selectedSans.password)
                 if(valid):
                     selectedService.password = encryptor.encrypt(new_password, rounds=2000, salt_size= 16)
