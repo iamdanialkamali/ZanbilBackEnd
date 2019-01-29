@@ -21,7 +21,7 @@ class ServiceController(APIView):
 
     def put(self, request, format=None, *args, **kwargs):
 
-        # try:
+         try:
             user_id = tokenizer.meta_decode(request.META)
             data = json.loads(request.body)
             name = data['name']
@@ -31,7 +31,7 @@ class ServiceController(APIView):
             days = data['days']
             is_protected =  data['is_protected']
             password =  data['password']
-
+            cancellation_range=data['cancellation_range']
             a = JalaliDatetime.now(TehranTimezone())
             is_protected = bool(int(is_protected))
 
@@ -48,6 +48,7 @@ class ServiceController(APIView):
                     timetable_id=timetable.id,
                     is_protected = is_protected,
                     password = hased_pass,
+                    cancellation_range=cancellation_range,
                 )
 
             
@@ -59,8 +60,8 @@ class ServiceController(APIView):
             return Response({'service':service_data,
                             'timetable' : sanses}
                                 , status=status.HTTP_200_OK)
-        # except Exception :
-        #     return Response({},status=status.HTTP_400_BAD_REQUEST)
+         except Exception :
+             return Response({},status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request, format=None, *args, **kwargs):
         try:
@@ -114,6 +115,7 @@ class ServiceController(APIView):
             sanses = data['sanses']
             id = data['id']
             capacity = data['capacity']
+            cancellation_range = data['cancellation_range']
             is_protected = bool(int(data['is_protected']))
             old_password = data['old_password']
             new_password = data['new_password']
@@ -123,6 +125,7 @@ class ServiceController(APIView):
             selectedService = Services.objects.get(pk=id)
             selectedService.name = name
             selectedService.fee = fee
+            selectedService.cancellation_range=cancellation_range
             selectedService.description = description
 
             if(bool(capacity_changed)):
