@@ -41,7 +41,7 @@ class SansController:
         reserved_sanses = Reserves.objects.filter(date__in=this_week_days_date)
         #exmine are seleted sanses reserved
         
-        reserved_sanses = Reserves.objects.filter(date__in=this_week_days_date).values('sans_id').annotate(total=Count('sans_id')).order_by('total')
+        reserved_sanses = Reserves.objects.filter(date__in=this_week_days_date,is_cancelled=False).values('sans_id').annotate(total=Count('sans_id')).order_by('total')
 
                
         result=[[],[],[],[],[],[],[]]

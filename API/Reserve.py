@@ -7,10 +7,7 @@ from rest_framework.views import APIView
 from .Notification import NotificationController
 from .Serializer import *
 from .Token import Tokenizer as tokenizer
-
-
 from passlib.hash import pbkdf2_sha256  as decryptor
-
 
 
 class ReserveController(APIView):
@@ -31,7 +28,8 @@ class ReserveController(APIView):
                 verified = decryptor.verify(password,service.password)
             reserves = Reserves.objects.filter(sans_id=sans_id,
                                             date=date,
-                                            service_id=service_id).values()
+                                            service_id=service_id,
+                                            is_cancelled=False).values()
             free = len(reserves) < sans.capacity
             if ( free and verified):
 
@@ -39,7 +37,8 @@ class ReserveController(APIView):
                                                   description=description,
                                                   sans_id=sans_id,
                                                   date=date,
-                                                  service_id=service_id)
+                                                  service_id=service_id,
+                                                  )
                 # NotificationController.Notify(user_id,sans_id,date)
                 reserve_data = ReservesSerializer(reserve).data
                 return Response(reserve_data
