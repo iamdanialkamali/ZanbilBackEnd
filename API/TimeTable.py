@@ -65,6 +65,20 @@ class TimeTableController(APIView):
 
         return timeTable
 
+    @staticmethod
+    def buildTimetable(days,business_id):
+        
+        timeTable = TimeTable.objects.create(business_id=business_id,sans_count=0)
+        for day in days:
+            for data in day:
+                sans = data['sans']
+                Sans.objects.create(weekday=sans['weekday'],
+                                                start_time = sans['start_time'],
+                                                end_time = sans['end_time']
+                                                ,timetable=timeTable
+                )
+        return timeTable
+
 #
 # start_time = input().split(":")
 # ali = datetime.time(hour=int(start_time[0]),minute=int(start_time[1]))

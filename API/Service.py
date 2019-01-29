@@ -32,11 +32,12 @@ class ServiceController(APIView):
             is_protected =  data['is_protected']
             password =  data['password']
             cancellation_range=data['cancellation_range']
+            
             a = JalaliDatetime.now(TehranTimezone())
             is_protected = bool(int(is_protected))
 
             hased_pass = encryptor.encrypt(password, rounds=2000, salt_size= 16)
-            timetable = TimeTableController.makeTimeTable(days,business_id)
+            timetable = TimeTableController.buildTimetable(days,business_id)
             
             if(True):
                 myService = Services.objects.create(
