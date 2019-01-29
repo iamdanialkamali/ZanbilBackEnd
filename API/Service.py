@@ -129,6 +129,14 @@ class ServiceController(APIView):
             selectedService.cancellation_range=cancellation_range
             selectedService.description = description
 
+
+            if( not (old_password=="")):
+                valid = encryptor.verify(old_password,selectedService.password)
+                if(valid):
+                    selectedService.password = encryptor.encrypt(new_password, rounds=2000, salt_size= 16)
+                else:
+                    return Response({}, status=status.HTTP_401_UNAUTHORIZED)
+
             if(bool(capacity_changed)):
                 service_sanses = Sans.objects.filter(timetable__id=selectedService.timetable.id)
                             
@@ -143,10 +151,8 @@ class ServiceController(APIView):
                     selectedService.password = ""
                     
 
-            if( not (old_password=="")):
-                valid = encryptor.verify(old_password,selectedService.password)
-                if(valid):
-                    selectedService.password = encryptor.encrypt(new_password, rounds=2000, salt_size= 16)
+            
+
             selectedService.save(force_update=True)
 
             # edit sanses
