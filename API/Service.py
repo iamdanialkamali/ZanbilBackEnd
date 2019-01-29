@@ -125,23 +125,23 @@ class ServiceController(APIView):
             selectedService.description = description
             selectedService.capacity = capacity
             
-            if(is_protected!= selectedService.is_protected):
+            if(is_protected != selectedService.is_protected):
                 if(is_protected):
                     selectedService.password = encryptor.encrypt(new_password, rounds=2000, salt_size= 16)
                 else:
                     selectedService.is_protected = False
-                    selectedService.is_protected = ""
+                    selectedService.password = ""
                     
 
             if( not (old_password=="")):
-                valid = encryptor.verify(old_password,selectedSans.password)
+                valid = encryptor.verify(old_password,selectedService.password)
                 if(valid):
                     selectedService.password = encryptor.encrypt(new_password, rounds=2000, salt_size= 16)
             selectedService.save(force_update=True)
 
             # edit sanses
             for sans in sanses:
-                selectedSans = Sans.objects.get(pk=sans['sans_id'])
+                selectedSans = Sans.objects.get(pk=int(sans['sans_id']))
                 if sans['is_deleted'] == "1":
                     selectedSans.delete()
                 else:
