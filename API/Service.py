@@ -1,6 +1,8 @@
 import json
 
 from khayyam import JalaliDate
+from khayyam import *
+
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -29,7 +31,8 @@ class ServiceController(APIView):
             days = data['days']
             is_protected =  data['is_protected']
             password =  data['password']
-            
+
+            a = JalaliDatetime.now(TehranTimezone())
             is_protected = bool(int(is_protected))
 
             hased_pass = encryptor.encrypt(password, rounds=2000, salt_size= 16)
@@ -110,7 +113,8 @@ class ServiceController(APIView):
             fee = data['fee']
             sanses = data['sanses']
             id = data['id']
-            
+            capacity = data['capacity']
+            is_protected = bool(int(data['is_protected']))
             old_password = data['old_password']
             new_password = data['new_password']
 
@@ -119,8 +123,17 @@ class ServiceController(APIView):
             selectedService.name = name
             selectedService.fee = fee
             selectedService.description = description
+            selectedService.capacity = capacity
             
-            if( not old_password==""):
+            if(is_protected!= selectedService.is_protected):
+                if(is_protected):
+                    selectedService.password = encryptor.encrypt(new_password, rounds=2000, salt_size= 16)
+                else:
+                    selectedService.is_protected = False
+                    selectedService.is_protected = ""
+                    
+
+            if( not (old_password=="")):
                 valid = encryptor.verify(old_password,selectedSans.password)
                 if(valid):
                     selectedService.password = encryptor.encrypt(new_password, rounds=2000, salt_size= 16)
@@ -132,7 +145,6 @@ class ServiceController(APIView):
                 if sans['is_deleted'] == "1":
                     selectedSans.delete()
                 else:
-                    selectedSans.capacity = sans['capacity']
                     selectedSans.start_time = sans['start_time']
                     selectedSans.end_time = sans['end_time']
                     selectedSans.save(force_update=True)
