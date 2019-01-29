@@ -125,7 +125,6 @@ class ReservesSerializer(serializers.ModelSerializer):
             'description',
             'service',
             'sans',
-            'cancellation_range',
             'is_cancelled',
         ]
 
@@ -156,6 +155,7 @@ class ServiceSearchSerializer(serializers.ModelSerializer):
             'rating',
             'timetable',
             'description',
+            'cancellation_range',
             'pictures',
         ]
 

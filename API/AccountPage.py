@@ -9,6 +9,8 @@ import json
 from .Token import Tokenizer as tokenizer
 
 from khayyam import *
+import datetime
+
 
 class AccountPageController(APIView):
 
@@ -19,7 +21,13 @@ class AccountPageController(APIView):
             reserves = Reserves.objects.filter(user_id=user_id).order_by('date')
             reserves_list = []
             for reserve in reserves:
+                if(reserve.date[4]=="/"):
+                    reserveDate=reserve.date.split("/");
+                else:
+                    reserveDate=reserve.date.split("-");
+               
                 reserveTime=reserve.sans.start_time.split(":");
+                
                 reserveDateTime=JalaliDatetime(int(reserveDate[0]),int(reserveDate[1]),int(reserveDate[2]), int(reserveTime[0]), int(reserveTime[1]),0);
 
                 #find cancellation range
