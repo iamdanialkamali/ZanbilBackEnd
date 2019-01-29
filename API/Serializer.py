@@ -125,6 +125,7 @@ class ReservesSerializer(serializers.ModelSerializer):
             'description',
             'service',
             'sans',
+            'cancellation_range',
             'is_cancelled',
         ]
 
