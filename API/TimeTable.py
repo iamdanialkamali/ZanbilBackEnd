@@ -70,7 +70,7 @@ class TimeTableController(APIView):
         
         timeTable = TimeTable.objects.create(business_id=business_id,sans_count=0)
         for day in days:
-            for sans in day:
+            for sans  in day:
                 Sans.objects.create(weekday=sans['weekday'],
                                                 start_time = sans['start_time'],
                                                 end_time = sans['end_time']
