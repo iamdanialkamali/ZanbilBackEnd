@@ -3,6 +3,9 @@ from datetime import timedelta
 from .models import Sans,Reserves
 from .Serializer import SansSerializer
 
+from django.db.models import Count
+
+
 class SansController:
     @staticmethod
     def getSansForWeek(timetable_id):
@@ -37,6 +40,10 @@ class SansController:
         # reserved_sanses = Reserves.objects.filter(date__in=this_week_days_date)
         reserved_sanses = Reserves.objects.filter(date__in=this_week_days_date)
         #exmine are seleted sanses reserved
+        
+        reserved_sanses = Reserves.objects.filter(date__in=this_week_days_date).values('sans_id').annotate(total=Count('sans_id')).order_by('total')
+
+               
         result=[[],[],[],[],[],[],[]]
         for sans in selected_sanses:
             is_reserved = False
@@ -46,7 +53,8 @@ class SansController:
             elif(start_week_date == JalaliDate.today()-timedelta(today_weekday) and  sans.weekday<today_weekday  ):
                 is_reserved = True
             capacity = sans.capacity - len(reserved_sanses.filter(sans_id = sans.id ).values())
-            if(capacity==0):
+            
+            if(capacity<1):
                 is_reserved = True
             result[sans.weekday].append({"sans":SansSerializer(sans).data,"is_reserved": is_reserved , 'capacity':capacity})
 
