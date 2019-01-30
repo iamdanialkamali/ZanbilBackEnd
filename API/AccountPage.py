@@ -10,6 +10,7 @@ from .Token import Tokenizer as tokenizer
 
 from khayyam import *
 import datetime
+import json
 
 
 class AccountPageController(APIView):
@@ -35,10 +36,15 @@ class AccountPageController(APIView):
                 delta = datetime.timedelta(hours=int(duration[0])-1, minutes=int(duration[1]))
 
                 #check isn't it late
-                if(JalaliDatetime.now()+delta < reserveDateTime):
+                if(JalaliDatetime.now() + delta < reserveDateTime):
                     reserve = {
                         'reserve':ReservesSerializer(reserve).data,
                         'is_cancellabe':True
+                    }
+                else:
+                    reserve = {
+                        'reserve':ReservesSerializer(reserve).data,
+                        'is_cancellabe':False
                     }
                     reserves_list.append(reserve)
 
